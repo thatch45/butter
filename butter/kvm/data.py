@@ -16,5 +16,17 @@ class HVStat(object):
         '''
         Return a list, suitable for the salt client, of the hypervisors
         '''
-        data = self.local.cmd('*', 'virt.is_hyper')
+        data = self.local.cmd('*', 'virt.is_kvm_hyper')
+        hypers = set()
+        for hyper in data:
+            if data[hyper] == True:
+                hypers.add(hyper)
+        return list(hypers)
+
+    def resources(self):
+        '''
+        Return the full resources information about the cloud
+        '''
+        return self.local.cmd(self.hypers, 'virt.full_info', expr_form='list')
+
 
