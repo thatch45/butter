@@ -13,7 +13,11 @@ def config(path='/etc/butter/kvm_config'):
     '''
     Load up the configuration for butter kvm
     '''
-    opts = {}
+    opts = {'images': '/srv/vm/images',
+            'instances': '/srv/vm/instances',
+            'dnsmasq': '',
+            'puppet': 0,
+            'salt_pki': '/etc/salt/pki'}
     if os.path.isfile(path):
         try:
             opts.update(yaml.load(open(path, 'r')))
