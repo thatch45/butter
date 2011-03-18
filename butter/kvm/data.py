@@ -8,7 +8,8 @@ class HVStat(object):
     '''
     Detects information about the hypervisors
     '''
-    def __init__(self):
+    def __init__(self, opts):
+        self.opts = opts
         self.local = salt.client.LocalClient()
         self.hypers = self.__hypers()
 
@@ -27,5 +28,8 @@ class HVStat(object):
         '''
         Return the full resources information about the cloud
         '''
-        return self.local.cmd(self.hypers, 'virt.full_info', expr_form='list')
+        return self.local.cmd(self.hypers,
+                'buttervm.full_butter_data',
+                args=[self.opts['local_path']]
+                expr_form='list')
 
