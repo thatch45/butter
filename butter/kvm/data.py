@@ -29,4 +29,3 @@ class HVStat(object):
         '''
         return self.local.cmd(self.hypers, 'virt.full_info', expr_form='list')
 
-
