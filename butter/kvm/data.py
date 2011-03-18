@@ -30,6 +30,6 @@ class HVStat(object):
         '''
         return self.local.cmd(self.hypers,
                 'buttervm.full_butter_data',
-                args=[self.opts['local_path']]
+                arg=[self.opts['local_path']]
                 expr_form='list')
 
