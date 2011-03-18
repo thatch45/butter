@@ -12,6 +12,7 @@ class HVStat(object):
         self.opts = opts
         self.local = salt.client.LocalClient()
         self.hypers = self.__hypers()
+        self.resources = self.get_resources()
 
     def __hypers(self):
         '''
@@ -24,7 +25,7 @@ class HVStat(object):
                 hypers.add(hyper)
         return list(hypers)
 
-    def resources(self):
+    def get_resources(self):
         '''
         Return the full resources information about the cloud
         '''
