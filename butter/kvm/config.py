@@ -17,6 +17,7 @@ def config(path='/etc/butter/kvm_config'):
             'instances': '/srv/vm/instances',
             'local_path': '/mnt/local/vm',
             'storage_type': 'local', # Can be 'local', 'shared', 'choose'
+            'distro', 'arch', # The default distribution to use
             'dnsmasq': '',
             'puppet': 0,
             'salt_pki': '/etc/salt/pki'}
