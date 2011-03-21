@@ -200,51 +200,6 @@ class Create(object):
                         ret['hyper'] = host
         return ret
 
-    # Move to minion side
-    def _set_overlay(self, vda, target):
-        '''
-        Uses guestfish to overlay files into the vm image.
-        '''
-        over = os.path.join(self.opts['overlay'], self.opts['name'])
-        if not os.path.isdir(over):
-            return
-        tarball = os.path.join(self.instance,
-                str(int(time.time())) + str(random.randint(10000,99999)) + '.tgz')
-        cwd = os.getcwd()
-        os.chdir(over)
-        print 'Packaging the virtual machine overlay'
-        t_cmd = 'tar czf ' + tarball + ' *'
-        subprocess.call(t_cmd, shell=True)
-        print 'Applying the virtual machine overlay, this will take a few'\
-            + ' moments...'
-        g_cmd = ''
-        if os.path.isfile('/etc/debian_version'):
-            os.environ['LIBGUESTFS_QEMU'] = '/opt/guest-qemu/qemu-wrap'
-        if self.opts['distro'] == 'ubuntu':
-            g_cmd = 'guestfish -a ' + vda + ' --mount ' + self.opts['root']\
-                  + ' tgz-in ' + tarball + ' /'
-        else:
-            g_cmd = 'guestfish -i -a ' + vda + ' tgz-in ' + tarball + ' /'
-        subprocess.call(g_cmd, shell=True)
-        os.remove(tarball)
-
-    # Move to minion side
-    def _place_image(self, image, vda):
-        '''
-        Moves the image file from the image pool into the final destination.
-        '''
-        image_d = image + '.d'
-        if not os.path.isdir(image_d):
-            print 'No available images in the pool, copying fresh image...'
-            shutil.copy(image, vda)
-            return
-        images = os.listdir(image_d)
-        if not images:
-            print 'No available images in the pool, copying fresh image...'
-            shutil.copy(image, vda)
-            return
-        shutil.move(os.path.join(image_d, images[0]), vda)
-
     def create(self):
         '''
         Create a new virtual machine, returns the hypervisor housing the
@@ -281,6 +236,7 @@ class Create(object):
             [
             self.instance,
             vda,
+            image,
             self.opts['pin'],
             ],
             )
