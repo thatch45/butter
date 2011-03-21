@@ -248,32 +248,27 @@ class Create(object):
         '''
         host = self.find_host()
         if not host:
-            print 'Virtual machine ' + self.opts['name'] + ' not found in'\
+            print 'Virtual machine ' + self.opts['fqdn'] + ' not found in'\
                 + ' the cloud'
-            return
-        target = fc.Overlord(host)
-        target.virt.destroy(self.opts['name'])
-        return target
+            return False
+        return self.local(host, 'virt.destroy', [self.opts['fqdn']])
 
     def purge(self):
         '''
         Destroy and DELETE the named vm
         '''
         host = self.find_host()
-        target = None
         if not host:
-            print 'Virtual machine ' + self.opts['name'] + ' not found in'\
+            print 'Virtual machine ' + self.opts['fqdn'] + ' not found in'\
                 + ' the cloud'
-        else:
-            target = fc.Overlord(host)
+            return False
         if not self.opts['force']:
             print 'This action will recursively destroy a virtual machine, you'\
                 + ' better be darn sure you know what you are doing!!'
             conf = raw_input('Please enter yes or no [yes/No]: ')
             if not conf.strip() == 'yes':
                 return
-        if target:
-            target.clayvm.purge(self.opts['name'])
+        self.local.cmd(host, 'virt.purge', [host])
         if os.path.isdir(self.instance):
             shutil.rmtree(self.instance)
 
@@ -282,16 +277,8 @@ class Create(object):
         Returns the hostname of the hypervisor housing the named vm
         '''
         h_data = self._find_hyper()
-        if h_data[1]:
-            return h_data[0]
+        if h_data['state']:
+            return h_data['hyper']
         else:
             return None
-
-    def get_host_fc(self):
-        '''
-        Returns a func connection to the host holding the named vm.
-        '''
-        h_data = self._find_hyper()
-        if h_data[1]:
-            return fc.Overlord(h_data[0])
 
