@@ -270,16 +270,20 @@ class Create(object):
         # Get the root image
         image = find_image(self.opts['pool'], self.opts['distro'])
         # Execute the logic to figure out where the root image needs to be
-        vda = self._get_vda()
+        vda = os.path.join(self.local_path, self.opts['fqdn'], 'vda')
         # Place the xml file
         conf = os.path.join(self.instance, 'config.xml')
         self.__gen_xml(vda, conf)
         # Generate the overlay
         self._gen_overlay()
-        self.local(h_data['hyper'], 'buttervm.create', [self.instance,
+        # Pass it over to the hypervisor
+        self.local.cmd(h_data['hyper'], 'buttervm.create',
+            [
+            self.instance,
             vda,
             self.opts['pin'],
-            self.opts['local_path']] )
+            ],
+            )
         return True
 
     def destroy(self):
