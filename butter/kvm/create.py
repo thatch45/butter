@@ -268,7 +268,7 @@ class Create(object):
             conf = raw_input('Please enter yes or no [yes/No]: ')
             if not conf.strip() == 'yes':
                 return
-        self.local.cmd(host, 'virt.purge', [host])
+        self.local.cmd(host, 'virt.purge', [host, True])
         if os.path.isdir(self.instance):
             shutil.rmtree(self.instance)
 
