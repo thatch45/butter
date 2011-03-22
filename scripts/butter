@@ -1,0 +1,15 @@
+#!/usr/bin/python
+'''
+Script frontend for butter
+'''
+import butter
+
+def main():
+    '''
+    The main function
+    '''
+    butter.run()
+
+if __name__ == '__main__':
+     main()
+
