@@ -1,6 +1,8 @@
 '''
 Prepare files which are generated before deployment for the overlay.
 '''
+# This interface needs to be pluggable, so that external application control
+# and generating overlay components can be written in seperate files
 
 import subprocess
 import os

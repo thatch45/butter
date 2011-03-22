@@ -8,6 +8,7 @@ machine.
 # Import butter libs
 import butter.kvm.data
 import butter.utils
+import butter.kvm.overlay
 # Import salt
 import salt.client
 # Import python libs
@@ -58,6 +59,13 @@ class Create(object):
         self.hvstat = hvstat
         self.local = self.hvstat.local
 
+    def _gen_overly(self):
+        '''
+        Generates the overlay
+        '''
+        over = buter.kvm.overlay(self.opts)
+        over.setup_overlay()
+
     def __gen_instance(self):
         '''
         Figures out what the instance directory should be and returns it.
@@ -73,11 +81,11 @@ class Create(object):
         '''
         Generates the libvirt xml file for kvm
         '''
-        external_kernel = '''
-                <kernel>%%KERNEL%%</kernel>
-                <initrd>%%INITRD%%</initrd>
-                <cmdline>root=%%ROOT%% vga=normal</cmdline>
-        '''
+        #external_kernel = '''
+        #        <kernel>%%KERNEL%%</kernel>
+        #        <initrd>%%INITRD%%</initrd>
+        #        <cmdline>root=%%ROOT%% vga=normal</cmdline>
+        #'''
         data = '''
 <domain type='kvm'>
         <name>%%NAME%%</name>
