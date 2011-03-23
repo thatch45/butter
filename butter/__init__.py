@@ -30,9 +30,11 @@ The available subsystems are:'''
 
         print dia
         print subsys
+        sys.exit(42)
     elif not subsys.count(sys.argv[1]):
         print dia
         print subsys
+        sys.exit(42)
 
     {
      'kvm': __run_kvm(),
