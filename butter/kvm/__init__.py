@@ -267,13 +267,13 @@ class KVMD(object):
     '''
     The butter kvm subsystem daemon
     '''
-    def __init__(self, conf='/etc/butter/kvm.conf'):
+    def __init__(self):
         self.cli = self.__parse_cli()
         self.opts = self.__parse(conf)
 
     def __parse_cli(self):
         '''
-        Parse the command line options passed to the clay daemon
+        Parse the command line options passed to the butter kvm daemon
         '''
         parser = optparse.OptionParser()
         parser.add_option('-f',
@@ -283,17 +283,24 @@ class KVMD(object):
                 dest='foreground',
                 help='Run the clay daemon in the foreground')
 
+        parser.add_option('-c',
+                '--config',
+                default='/etc/butter/kvm.conf',
+                dest='config',
+                help='Pass in an alternative configuration file')
+
         options, args = parser.parse_args()
 
-        return {'foreground': options.foreground}
+        return {'foreground': options.foreground,
+                'config': options.config}
 
-    def __parse(self, conf):
+    def __parse(self):
         '''
         Parse the clay deamon configuration file
         '''
         opts = {}
 
-        opts['pool'] = '/srv/vm/images/pool'
+        opts['pool'] = '/srv/vm/pool'
         opts['pool_size'] = '5'
         opts['keep_old'] = '2'
         opts['interval'] = '5'
@@ -302,13 +309,13 @@ class KVMD(object):
         opts['format'] = 'raw'
 
         if os.path.isfile(conf):
-            opts.update(yaml.load(open(conf, 'r')))
+            opts.update(yaml.load(open(self.cli['config'], 'r')))
 
         return opts
 
-    def clay_daemon(self):
+    def daemon(self):
         '''
-        Starts the clay daemon
+        Starts the buter kvm  daemon
         '''
         kvmd = butter.kvm.daemon.Daemon(self.opts)
         if not self.cli['foreground']:
