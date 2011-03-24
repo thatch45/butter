@@ -6,6 +6,8 @@ import sys
 import yaml
 
 import butter.kvm.config
+import butter.kvm.create
+import butter.kvm.overlay
 
 def domain():
     '''
@@ -33,7 +35,7 @@ class KVM(object):
         '''
         cli = self._parse_cli()
         opts = butter.kvm.config.config(cli['config'])
-        return opts.union(cli)
+        return opts.update(cli)
 
     def _parse_cli(self):
         '''
@@ -172,6 +174,7 @@ class KVM(object):
         cli['config'] = options.config
 
         # Figure out the fqdn
+        # This needs to be refined in case a host is not passed (for things like -Q)
         dom = domain()
         host = args[-1]
         if host.endswith(dom):
@@ -201,6 +204,64 @@ class KVM(object):
                 cli['env'] = cli['fqdn'].split('.')[1]
 
         return cli
+
+    def _verify_opts(self):
+        '''
+        Verify that the passed options include the needed information
+        '''
+        if not self.opts['fqdn']:
+            print ' requires the name of a virtual machine'
+            sys.exit(1)
+
+    def create_obj(self):
+        '''
+        Return a butter.kvm Create object
+        '''
+        self._verify_opts()
+        return buter.kvm.create.Create(self.opts,
+                butter.kvm.data.HVStat(self.opts))
+
+    def query(self):
+        '''
+        Execute the logic for the query options
+        '''
+        data = butter.kvm.data.HVStat(self.opts)
+        if self.opts['fqdn']:
+            data.print_system(self.opts['fqdn'])
+        elif self.opts['avail']:
+            data.print_avail()
+        else:
+            data.print_query()
+
+    def run(self):
+        '''
+        Execute the logic required to act on the passed state data
+        '''
+        # Each sequence should be a function in the class so that the
+        # capabilities can be manipulated in a more api centric way
+        self._verify_env()
+        if self.opts['create']:
+            # Create Sequence
+            self.create_obj().create()
+        elif self.opts['destroy']:
+            # Destroy Sequence
+            self.create_obj().destroy()
+        elif self.opts['purge']:
+            # Purge Sequence
+            self.create_obj().purge()
+            butter.kvm.overlay.Overlay(self.opts).purge_overlay()
+        elif self.opts['query']:
+            # Query Sequence
+            self.query()
+        elif self.opts['migrate']:
+            # Migrate Sequence
+            buter.kvm.migrate.Migrate(self.opts).run_logic()
+        elif self.opts['reset']:
+            create = self.create_obj()
+            create.destroy()
+            time.sleep(2)
+            create.create()
+
 
 class KVMD(object):
     '''
