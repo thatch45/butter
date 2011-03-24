@@ -34,3 +34,26 @@ class HVStat(object):
                 arg=[self.opts['local_path']]
                 expr_form='list')
 
+    def system(self, system):
+        '''
+        Returns the data pertinant to a specific system
+        '''
+        return None
+
+    def print_system(self, system):
+        '''
+        Prints out the data to a console about a specific system
+        '''
+        print self.system(system)
+
+    def print_avail():
+        '''
+        Print the available resources for all hypervisors
+        '''
+        print 'foo'
+
+    def print_query():
+        '''
+        Prints out the information gathered in a clean way
+        '''
+        print 'foobar'
