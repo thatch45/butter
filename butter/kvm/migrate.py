@@ -26,8 +26,8 @@ class Migrate(object):
         '''
         Migrate a virtual machine to the specified destoination.
         '''
-        if not name and self.opts['name']:
-            name = self.opts['name']
+        if not name and self.opts['fqdn']:
+            name = self.opts['fqdn']
         else:
             raise ValueError('Attemting to migrate without a vm name')
         
