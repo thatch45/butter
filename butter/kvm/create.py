@@ -226,8 +226,8 @@ class Create(object):
         conf = os.path.join(self.instance, 'config.xml')
         self.__gen_xml(vda, conf)
         # Generate and apply the overlay
-        self.over.setup_overlay(h_data['hyper'], vda)
-        self.apply_overlay(host, vda)
+        self.over.setup_overlay()
+        self.apply_overlay(h_data['hyper'], vda)
         # Pass it over to the hypervisor
         self.local.cmd(h_data['hyper'], 'butterkvm.create',
             [
