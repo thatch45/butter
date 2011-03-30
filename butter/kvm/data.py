@@ -31,14 +31,14 @@ class HVStat(object):
         '''
         return self.local.cmd(self.hypers,
                 'butterkvm.full_butter_data',
-                arg=[self.opts['local_path']]
+                arg=[self.opts['local_path']],
                 expr_form='list')
 
     def system(self, system):
         '''
         Returns the data pertinant to a specific system
         '''
-        return None
+        return system
 
     def print_system(self, system):
         '''
@@ -46,13 +46,13 @@ class HVStat(object):
         '''
         print self.system(system)
 
-    def print_avail():
+    def print_avail(self):
         '''
         Print the available resources for all hypervisors
         '''
         print 'foo'
 
-    def print_query():
+    def print_query(self):
         '''
         Prints out the information gathered in a clean way
         '''
