@@ -54,7 +54,7 @@ class HVStat(object):
                     + str(self.resources[host]['node_info']['phymemory']) + '\n'
                 out += '  Virtual machines running on ' + host + ' -\n'
                 for name, info in self.resources[host]['vm_info'].items():
-                    out += '      ' + name + ' :\n'
+                    out += '      ' + name + ' -\n'
                     out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                     out += '        Virtual Memory: ' + str(info['mem']) + '\n'
                     out += '        State: ' + info['state'] + '\n'
@@ -67,7 +67,7 @@ class HVStat(object):
                 out += 'Virtual machine running on host ' + host + '\n'
                 name = system
                 info = self.resources[host]['vm_info'][system]
-                out += '      ' + name + ' :\n'
+                out += '      ' + name + ' -\n'
                 out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                 out += '        Virtual Memory: ' + str(info['mem']) + '\n'
                 out += '        State: ' + info['state'] + '\n'
@@ -97,7 +97,7 @@ class HVStat(object):
                 + str(self.resources[host]['node_info']['phymemory']) + '\n'
             out += '  Virtual machines running on ' + host + ' -\n'
             for name, info in self.resources[host]['vm_info'].items():
-                out += '      ' + name + ' :\n'
+                out += '      ' + name + ' -\n'
                 out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                 out += '        Virtual Memory: ' + str(info['mem']) + '\n'
                 out += '        State: ' + info['state'] + '\n'
