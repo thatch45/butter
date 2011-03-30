@@ -145,7 +145,7 @@ class Create(object):
         Calls the hypervisor to apply the overlay
         '''
         return self.local.cmd(host,
-                              'buttervm.apply_overlay',
+                              'butterkvm.apply_overlay',
                               [vda, self.instance],
                               120)
 
@@ -230,7 +230,7 @@ class Create(object):
         # Generate the overlay
         self._gen_overlay(h_data['hyper'], vda)
         # Pass it over to the hypervisor
-        self.local.cmd(h_data['hyper'], 'buttervm.create',
+        self.local.cmd(h_data['hyper'], 'butterkvm.create',
             [
             self.instance,
             vda,

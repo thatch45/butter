@@ -30,7 +30,7 @@ class HVStat(object):
         Return the full resources information about the cloud
         '''
         return self.local.cmd(self.hypers,
-                'buttervm.full_butter_data',
+                'butterkvm.full_butter_data',
                 arg=[self.opts['local_path']]
                 expr_form='list')
 
