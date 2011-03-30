@@ -178,12 +178,15 @@ class KVM(object):
         # Figure out the fqdn
         # This needs to be refined in case a host is not passed
         # (for things like -Q)
-        dom = domain()
-        host = args[-1]
-        if host.endswith(dom):
-            cli['fqdn'] = host
-        else:
-            cli['fqdn'] = host + '.' + dom
+        cli['fqdn'] = ''
+        if len(args) > 1:
+            dom = domain()
+            host = args[-1]
+            if host.endswith(dom):
+                cli['fqdn'] = host
+            else:
+                cli['fqdn'] = host + '.' + dom
+
         # Figure out the pins
         if options.pin:
             disks = []
@@ -199,13 +202,14 @@ class KVM(object):
         else:
             cli['pin'] = ''
         # evaluate the environment
-        if options.env:
-            cli['env'] = options.env
-        else:
-            if cli['fqdn'].count('_'):
-                cli['env'] = cli['fqdn'].split('_')[1].split('.')[0]
+        if cli['fqdn']:
+            if options.env:
+                cli['env'] = options.env
             else:
-                cli['env'] = cli['fqdn'].split('.')[1]
+                if cli['fqdn'].count('_'):
+                    cli['env'] = cli['fqdn'].split('_')[1].split('.')[0]
+                else:
+                    cli['env'] = cli['fqdn'].split('.')[1]
 
         return cli
 
