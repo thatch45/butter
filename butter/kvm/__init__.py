@@ -23,7 +23,7 @@ def domain():
     # This is going to need to be more robust
     return subprocess.Popen('dnsdomainname',
             shell=True,
-            stdout=subprocess.PIPE).communicate()[0]
+            stdout=subprocess.PIPE).communicate()[0].strip()
 
 class KVM(object):
     '''
