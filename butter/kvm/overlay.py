@@ -18,6 +18,9 @@ class Overlay(object):
         self.over = self.__gen_overlay_dir()
 
     def __gen_overlay_dir(self):
+        '''
+        verify that the overlay directory is present
+        '''
         over = os.path.join(self.opts['instances'],
                 self.opts['fqdn'],
                 'overlay')
@@ -29,17 +32,18 @@ class Overlay(object):
         '''
         Generate and place the puppet certificates.
         '''
-        tmp_priv = os.path.join(self.over, 'priv')
         privkeyd = os.path.join(self.over, 'var/lib/puppet/ssl/private_keys/')
         privkey = os.path.join(privkeyd, self.opts['fqdn'] + '.pem')
         if os.path.isfile(privkey):
             return
         if not os.path.exists(privkeyd):
             os.makedirs(privkeyd)
-        ca_cmd = 'puppetca --generate ' + self.opts['fqdn'] + ' --privatekeydir=' + self.over
+        ca_cmd = 'puppetca --generate ' + self.opts['fqdn']\
+               + ' --privatekeydir=' + self.over
         subprocess.call(ca_cmd, shell=True)
         if os.path.isfile(os.path.join(self.over, self.opts['fqdn'] + '.pem')):
-            shutil.move(os.path.join(self.over, self.opts['fqdn'] + '.pem'), privkeyd)
+            shutil.move(os.path.join(self.over, self.opts['fqdn'] + '.pem'),
+                    privkeyd)
         else:
             err = 'Failed to find puppet key, was it generated properly?'
             sys.stderr.write(err + '\n')
@@ -88,9 +92,12 @@ class Overlay(object):
                 os.path.join(keydir, 'ssh_host_rsa_key'),
                 os.path.join(keydir, 'ssh_host_dsa_key')
                ]
-        cmds = ['ssh-keygen -f ' + keydir + '/ssh_host_key -t rsa1 -C ' + self.opts['name']  + ' -N ""',
-                'ssh-keygen -f ' + keydir + '/ssh_host_rsa_key -t rsa -C ' + self.opts['name'] + ' -N ""',
-                'ssh-keygen -f ' + keydir + '/ssh_host_dsa_key -t dsa -C ' + self.opts['name'] + ' -N ""'
+        cmds = ['ssh-keygen -f ' + keydir + '/ssh_host_key -t rsa1 -C '\
+                    + self.opts['name']  + ' -N ""',
+                'ssh-keygen -f ' + keydir + '/ssh_host_rsa_key -t rsa -C '\
+                    + self.opts['name'] + ' -N ""',
+                'ssh-keygen -f ' + keydir + '/ssh_host_dsa_key -t dsa -C '\
+                    + self.opts['name'] + ' -N ""',
                ]
         for cmdi in range(0, len(cmds)):
             if os.path.exists(keys[cmdi]):
