@@ -24,6 +24,7 @@ def config(path='/etc/butter/kvm_config'):
             # name on the vm
             'network': {'br0', 'eth0'},
             'graphics': 'vnc', # Set to vnc or spice
+            'udev': 'True', # manage udev network data in the overlay
             'dnsmasq': '',
             'puppet': 0,
             }
