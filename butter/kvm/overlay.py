@@ -61,7 +61,7 @@ class Overlay(object):
         lines = []
         udev = 'SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*",'\
              + ' ATTR{address}=="%%MAC%%", ATTR{dev_id}=="0x0",'\
-             + ' ATTR{type}=="1", KERNEL=="eth*", NAME="%%DEV%%\n"'
+             + ' ATTR{type}=="1", KERNEL=="eth*", NAME="%%DEV%%"\n'
         for dev, mac in self.macs.items():
             lines.append(udev.replace('%%MAC%%', mac).replace('%%DEV%%', dev))
         if not os.path.isdir(os.path.dirname(fn_)):
