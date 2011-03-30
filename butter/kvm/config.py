@@ -20,7 +20,8 @@ def config(path='/etc/butter/kvm_config'):
             # Global vm generation options
             'storage_type': 'local', # Can be 'local', 'shared', 'choose'
             'distro': 'arch', # The default distribution to use
-            # A dict of network bridges bound to the respective interface name on the vm
+            # A dict of network bridges bound to the respective interface
+            # name on the vm
             'network': {'br0', 'eth0'},
             'graphics': 'vnc', # Set to vnc or spice
             'dnsmasq': '',

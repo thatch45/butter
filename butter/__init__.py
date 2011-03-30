@@ -5,7 +5,8 @@ import sys
 import butter.kvm
 
 subsys = [
-        'kvm',]
+        'kvm',
+        ]
 
 def __run_kvm():
     '''
@@ -37,5 +38,5 @@ The available subsystems are:'''
         sys.exit(42)
 
     {
-     'kvm': __run_kvm(),
-        }[sys.argv[1]]()
+    'kvm': __run_kvm(),
+    }[sys.argv[1]]()
