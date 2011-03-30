@@ -4,7 +4,6 @@ automatic deployment pool of vm images.
 '''
 
 import os
-import sys
 import time
 import shutil
 import hashlib
@@ -185,7 +184,8 @@ class Daemon(object):
                     if os.path.isdir(destroy_t):
                         shutil.rmtree(destroy_t)
                 while len(os.listdir(active_d)) < int(self.opts['pool_size']):
-                    dst = hashlib.md5(str(random.randint(1,9999999999))).hexdigest()
+                    dst = hashlib.md5(str(random.randint(1,
+                        9999999999))).hexdigest()
                     atfn = os.path.join(active_t, dst)
                     shutil.copy(active, atfn)
                     shutil.move(atfn, os.path.join(active_d,
