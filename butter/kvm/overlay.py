@@ -47,7 +47,7 @@ class Overlay(object):
             if os.path.isfile(dnsmasq_conf):
                 for line in open(dnsmasq_conf, 'r').readlines():
                     comps = line.split(',')
-                    macs[comps[0].split(':')[1]] = comps[1]
+                    macs[comps[1]] = comps[0][comps[0].index(':') + 1:]
                 return macs
         for bridge, dev in self.opts['network'].items():
             macs[dev] = butter.utils.gen_mac()
