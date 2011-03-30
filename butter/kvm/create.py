@@ -9,15 +9,10 @@ machine.
 import butter.kvm.data
 import butter.utils
 import butter.kvm.overlay
-# Import salt
-import salt.client
 # Import python libs
 import shutil
 import os
-import time
-import random
 import subprocess
-import sys
 
 def find_image(pool, distro):
     '''
@@ -28,7 +23,7 @@ def find_image(pool, distro):
                 'x86',
                 ]
     images = []
-    if not os.path.isdir(pool]):
+    if not os.path.isdir(pool):
         raise Exception('The virtual machine image pool dir is not present')
     for fn_ in os.listdir(pool):
         path = os.path.join(pool, fn_)
@@ -63,29 +58,22 @@ class Create(object):
         '''
         Generates the overlay
         '''
-        over = buter.kvm.overlay(self.opts)
+        over = butter.kvm.overlay(self.opts)
         over.setup_overlay()
 
     def __gen_instance(self):
         '''
         Figures out what the instance directory should be and returns it.
         '''
-        sec = os.path.join(self.opts['instances'], self.opts['fqdn'])
-        if os.path.isdir(pri):
-            return pri
-        if os.path.isdir(sec):
-            return sec
-        return pri
+        instance = os.path.join(self.opts['instances'], self.opts['fqdn'])
+        if not os.path.isdir(instance):
+            os.makedirs(instance)
+        return instance
 
     def __gen_xml(self, vda, conf):
         '''
         Generates the libvirt xml file for kvm
         '''
-        #external_kernel = '''
-        #        <kernel>%%KERNEL%%</kernel>
-        #        <initrd>%%INITRD%%</initrd>
-        #        <cmdline>root=%%ROOT%% vga=normal</cmdline>
-        #'''
         data = '''
 <domain type='kvm'>
         <name>%%NAME%%</name>
@@ -117,7 +105,7 @@ class Create(object):
         data = data.replace('%%VDA%%', vda)
         nics = ''
         for bridge in self.opts['network']:
-            nic= '''
+            nic = '''
                 <interface type='bridge'>
                         <source bridge='%%BRIDGE%%'/>
                         <mac address='%%MAC%%'/>
@@ -128,14 +116,6 @@ class Create(object):
                 self.opts['network'][bridge]))
             nics += nic
         data = data.replace('%%NICS%%', nics)
-
-        #if self.opts['extk']:
-        #    data = data.replace('%%EXTK%%', external_kernel)
-        #    data = data.replace('%%KERNEL%%', self.opts['kernel'])
-        #    data = data.replace('%%INITRD%%', self.opts['initrd'])
-        #    data = data.replace('%%ROOT%%', root)
-        #else:
-        #    data = data.replace('%%EXTK%%', '')
 
         if self.opts['pin']:
             letters = butter.utils.gen_letters()
@@ -170,6 +150,7 @@ class Create(object):
         ret = {'hyper': '',
                'state': False}
         best = (-10000, -1000000, 1000000)
+        resources = self.hvstat.resources
         # Is the vm running somewhere?
         for host in resources:
             for vm_ in resources[host]['vm_info']:
@@ -233,7 +214,7 @@ class Create(object):
         # Get the root image
         image = find_image(self.opts['pool'], self.opts['distro'])
         # Execute the logic to figure out where the root image needs to be
-        vda = os.path.join(self.local_path, self.opts['fqdn'], 'vda')
+        vda = os.path.join(self.opts['local_path'], self.opts['fqdn'], 'vda')
         # Place the xml file
         conf = os.path.join(self.instance, 'config.xml')
         self.__gen_xml(vda, conf)
@@ -259,7 +240,7 @@ class Create(object):
             print 'Virtual machine ' + self.opts['fqdn'] + ' not found in'\
                 + ' the cloud'
             return False
-        return self.local(host, 'virt.destroy', [self.opts['fqdn']])
+        return self.local.cmd(host, 'virt.destroy', [self.opts['fqdn']])
 
     def purge(self):
         '''
