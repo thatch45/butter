@@ -146,10 +146,11 @@ class KVM(object):
                 help='The explicit name of the hypervisor to use, bypass node'\
                     + ' detection by butter')
 
-
         parser.add_option('--config',
                 dest='config',
-                default='/etc/butter/kvm.conf')
+                default='/etc/butter/kvm.conf',
+                help='Pass in an alternative path for the butter kvm'\
+                    + ' configuration file; default: /etc/butter/kvm.conf')
 
         options, args = parser.parse_args()
 
