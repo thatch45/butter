@@ -53,13 +53,7 @@ class Create(object):
         self.instance = self.__gen_instance()
         self.hvstat = hvstat
         self.local = self.hvstat.local
-
-    def _gen_overly(self):
-        '''
-        Generates the overlay
-        '''
-        over = butter.kvm.overlay(self.opts)
-        over.setup_overlay()
+        self.over = butter.kvm.overlay(self.opts)
 
     def __gen_instance(self):
         '''
@@ -112,8 +106,8 @@ class Create(object):
                         <model type='virtio'/>
                 </interface>\n'''
             nic = nic.replace('%%BRIDGE%%', bridge)
-            nic = nic.replace('%%MAC%%', butter.dns.set_mac(self.opts['fqdn'],
-                self.opts['network'][bridge]))
+            nic = nic.replace('%%MAC%%',
+                    self.over.macs[self.opts['network'][bridge][0]])
             nics += nic
         data = data.replace('%%NICS%%', nics)
 
@@ -140,7 +134,7 @@ class Create(object):
             data = data.replace('%%PIN%%', '')
         open(conf, 'w+').write(data)
 
-    def _gen_overlay(self, host, vda):
+    def _apply_overlay(self, host, vda):
         '''
         Calls the hypervisor to apply the overlay
         '''
@@ -231,8 +225,9 @@ class Create(object):
         # Place the xml file
         conf = os.path.join(self.instance, 'config.xml')
         self.__gen_xml(vda, conf)
-        # Generate the overlay
-        self._gen_overlay(h_data['hyper'], vda)
+        # Generate and apply the overlay
+        self.over.setup_overlay(h_data['hyper'], vda)
+        self.apply_overlay(host, vda)
         # Pass it over to the hypervisor
         self.local.cmd(h_data['hyper'], 'butterkvm.create',
             [
