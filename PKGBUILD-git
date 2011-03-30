@@ -1,0 +1,41 @@
+# Maintainer: Thomas S Hatch <thatch45 at gmail dot com>
+pkgname=butter-git
+pkgver=20110310
+pkgrel=1
+pkgdesc="The complex operation manager above salt"
+arch=('any')
+url="https://github.com/thatch45/butter"
+license=('APACHE')
+groups=()
+depends=('python2'
+         'salt-git')
+makedepends=('git')
+provides=()
+backup=('etc/butter/kvm')
+
+_gitroot="git://github.com/thatch45/butter.git"
+_gitname="butter"
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot $_gitname
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting make..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+  python2 setup.py install --root=$pkgdir/ --optimize=1
+} 
