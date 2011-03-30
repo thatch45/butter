@@ -134,11 +134,11 @@ class Overlay(object):
                 os.path.join(keydir, 'ssh_host_dsa_key')
                ]
         cmds = ['ssh-keygen -f ' + keydir + '/ssh_host_key -t rsa1 -C '\
-                    + self.opts['name']  + ' -N ""',
+                    + self.opts['fqdn']  + ' -N ""',
                 'ssh-keygen -f ' + keydir + '/ssh_host_rsa_key -t rsa -C '\
-                    + self.opts['name'] + ' -N ""',
+                    + self.opts['fqdn'] + ' -N ""',
                 'ssh-keygen -f ' + keydir + '/ssh_host_dsa_key -t dsa -C '\
-                    + self.opts['name'] + ' -N ""',
+                    + self.opts['fqdn'] + ' -N ""',
                ]
         for cmdi in range(0, len(cmds)):
             if os.path.exists(keys[cmdi]):
@@ -150,7 +150,7 @@ class Overlay(object):
         Generate all the DHCP configs for dnsmasq
         '''
         fn_ = os.path.join(self.opts['dnsmasq'],
-                self.opts['name'] + '.conf')
+                self.opts['fqdn'] + '.conf')
         if os.path.exists(fn_):
             return False
         configs = []
@@ -195,7 +195,7 @@ class Overlay(object):
                 return
         if self.opts['dnsmasq']:
             dhcp = os.path.join(self.opts['dnsmasq'],
-                self.opts['name'] + '.conf')
+                self.opts['fqdn'] + '.conf')
             if os.path.isfile(dhcp):
                 os.remove(dhcp)
         if os.path.isdir(self.over):
