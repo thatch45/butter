@@ -117,15 +117,6 @@ class KVM(object):
                     + ' attatch to. By default this will be determined by'
                     + ' the hostname')
 
-        parser.add_option('-a',
-                '--avail',
-                dest='avail',
-                default=False,
-                action='store_true',
-                help='This flag is for the Query command, this will cause'\
-                    + ' the available resources on the hypervisors to be'\
-                    + ' displayed')
-
         parser.add_option('-f',
                 '--force',
                 dest='force',
@@ -232,8 +223,6 @@ class KVM(object):
         data = butter.kvm.data.HVStat(self.opts)
         if self.opts['fqdn']:
             data.print_system(self.opts['fqdn'])
-        elif self.opts['avail']:
-            data.print_avail()
         else:
             data.print_query()
 
