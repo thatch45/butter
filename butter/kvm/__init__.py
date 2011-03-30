@@ -153,13 +153,10 @@ class KVM(object):
         cli['query'] = options.query
         cli['migrate'] = options.migrate
         cli['reset'] = options.reset
-        cli['name'] = options.name
         cli['distro'] = options.distro
-        cli['root'] = options.root
         cli['hyper'] = options.hyper
         cli['cpus'] = options.cpus
         cli['mem'] = options.mem
-        cli['avail'] = options.avail
         cli['force'] = options.force
         cli['clear_node'] = options.clear_node
         cli['config'] = options.config
