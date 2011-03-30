@@ -9,5 +9,6 @@
 # and using the specified mac addr prefix
 #network: {br0, [eth0, 52:54:00]}
 #graphics: vnc # Set to vnc or spice
+#udev: True
 #dnsmasq: 
 #puppet: 0
