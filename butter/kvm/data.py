@@ -34,17 +34,49 @@ class HVStat(object):
                 arg=[self.opts['local_path']],
                 expr_form='list')
 
-    def system(self, system):
-        '''
-        Returns the data pertinant to a specific system
-        '''
-        return system
-
     def print_system(self, system):
         '''
         Prints out the data to a console about a specific system
         '''
-        print self.system(system)
+        out = 'Butter kvm query\n'
+        for host in self.resources:
+            if host == system:
+                out += 'Information for ' + host + ' -\n'
+                out += '    Available cpus: '\
+                    + str(self.resources[host]['freecpu']) + '\n'
+                out += '    Free Memory: '\
+                    + str(self.resources[host]['freemem']) + '\n'
+                out += '    Local Images: '\
+                    + str(self.resources[host]['local_images']) + '\n'
+                out += '    Total cpu cores: '\
+                    + str(self.resources[host]['node_info']['cpus']) + '\n'
+                out += '    Total Memory: '\
+                    + str(self.resources[host]['node_info']['phymemory']) + '\n'
+                out += '  Virtual machines running on ' + host + ' -\n'
+                for name, info in self.resources[host]['vm_info'].items():
+                    out += '      ' + name + ' :\n'
+                    out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
+                    out += '        Virtual Memory: ' + str(info['mem']) + '\n'
+                    out += '        State: ' + info['state'] + '\n'
+                    out += '        Graphics: ' + info['graphics']['type']\
+                        +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
+                    out += '        Disks:\n'
+                    for dev, path in info['disks'].items():
+                        out += '          ' + dev + ': ' + path + '\n'
+            elif self.resources[host]['vm_info'].has_key(system):
+                out += 'Virtual machine running on host ' + host + '\n'
+                name = system
+                info = self.resources[host]['vm_info'][system]
+                out += '      ' + name + ' :\n'
+                out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
+                out += '        Virtual Memory: ' + str(info['mem']) + '\n'
+                out += '        State: ' + info['state'] + '\n'
+                out += '        Graphics: ' + info['graphics']['type']\
+                    +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
+                out += '        Disks:\n'
+                for dev, path in info['disks'].items():
+                    out += '          ' + dev + ': ' + path + '\n'
+        print out
 
     def print_query(self):
         '''
