@@ -107,7 +107,7 @@ class Create(object):
                 </interface>\n'''
             nic = nic.replace('%%BRIDGE%%', bridge)
             nic = nic.replace('%%MAC%%',
-                    self.over.macs[self.opts['network'][bridge][0]])
+                    self.over.macs[self.opts['network'][bridge]])
             nics += nic
         data = data.replace('%%NICS%%', nics)
 
