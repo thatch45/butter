@@ -108,6 +108,18 @@ class KVM(object):
                         + ' detect and use the latest available image;'\
                         + ' default = arch')
 
+        parser.add_option('-p',
+                '--pin',
+                dest='pin',
+                default='',
+                help='This option will create a set of local "pinned" virtual'\
+                    + ' machine images which will be made available to this'\
+                    + ' vm. The pinned vm image will be created on the'\
+                    + ' hypervisor. The pin option is a collection of options'\
+                    + ' delimited by commas. The option to pass is: '\
+                    + ' <image_path>::<size in GB>,<format(raw/qcow2)>,<fs(ext4/xfs)>'\
+                    + ':<size in GB>,<format(raw/qcow2)>,<fs(ext4/xfs)>, etc.')
+
         parser.add_option('-e',
                 '--env',
                 '--environment',
