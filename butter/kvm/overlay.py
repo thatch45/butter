@@ -4,10 +4,14 @@ Prepare files which are generated before deployment for the overlay.
 # This interface needs to be pluggable, so that external application control
 # and generating overlay components can be written in seperate files
 
+# Import python libs
 import subprocess
 import os
 import shutil
 import sys
+
+# Import butter libs
+import butter.utils
 
 class Overlay(object):
     '''
@@ -16,6 +20,7 @@ class Overlay(object):
     def __init__(self, opts):
         self.opts = opts
         self.over = self.__gen_overlay_dir()
+        self.macs = self.__find_macs()
 
     def __gen_overlay_dir(self):
         '''
@@ -27,6 +32,42 @@ class Overlay(object):
         if not os.path.isdir(over):
             os.makedirs(over)
         return over
+
+    def __find_macs(self):
+        '''
+        If dnsmasq support is enabled, search dnsmasq for the macs, otherwise
+        generate fresh mac addrs.
+        '''
+        macs = {}
+        if self.opts['dnsmasq']:
+            # Dnsmasq support is enabled, determine if this host has been
+            # previously configured.
+            dnsmasq_conf = os.path.join(self.opts['dnsmasq'],
+                    self.opts['fqdn'] + '.conf')
+            if os.path.isfile(dnsmasq_conf):
+                for line in open(dnsmasq_conf, 'r').readlines():
+                    comps = line.split(',')
+                    macs[comps[0].split(':')[1]] = comps[1]
+                return macs
+        for bridge, dev in self.opts['network'].items():
+            macs[dev] = butter.utils.gen_mac()
+        return macs
+
+    def gen_udev(self):
+        '''
+        Generate and place the udev network configuration file
+        '''
+        fn_ = os.path.join(self.over, self.opts['udev'].lstrip('/'))
+        lines = []
+        udev = 'SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*",'\
+             + ' ATTR{address}=="%%MAC%%", ATTR{dev_id}=="0x0",'\
+             + ' ATTR{type}=="1", KERNEL=="eth*", NAME="%%DEV%%\n"'
+        for dev, mac in self.macs.items():
+            lines.append(udev.replace('%%MAC%%', mac).replace('%%DEV%%', dev))
+        if not os.path.isdir(os.path.dirname(fn_)):
+            os.makedirs(os.path.dirname(fn_))
+        if not os.path.exists(fn_):
+            open(fn_, 'w+').writelines(lines)
 
     def gen_puppet(self):
         '''
@@ -113,10 +154,10 @@ class Overlay(object):
         if os.path.exists(fn_):
             return False
         configs = []
-        for mac in self.opts['macs']:
+        for dev, mac in self.macs.items():
             configs.append("dhcp-host=net:%s,%s,%s,2h"%(mac,
-                self.opts['macs'][mac],
-                self.opts['name']))
+                dev,
+                self.opts['fqdn']))
         configs.append("")
         configs = os.linesep.join(configs)
 
@@ -138,6 +179,8 @@ class Overlay(object):
                 subprocess.call(r_cmd, shell=True)
         if self.opts['env']:
             self.set_env()
+        if self.opts['udev']:
+            self.gen_udev()
 
     def purge_overlay(self):
         '''
