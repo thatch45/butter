@@ -182,10 +182,14 @@ class Create(object):
 
         # Is the hypervisor defined on the command line?
         if self.opts['hyper'] and resources.has_key(self.opts['hyper']):
-            return (self.opts['hyper'], False)
-        elif not resources.has_key(self.opts['hyper']):
+            ret['hyper'] = self.opts['hyper']
+            ret['state'] = False
+            return ret
+        elif self.opts['hyper'] and not resources.has_key(self.opts['hyper']):
             # hyper specified on the command line does not exist
-            return [None, True]
+            ret['hyper'] = self.opts['hyper']
+            ret['state'] = True
+            return ret
         
         # The vm destination needs to be discovered
         for host in resources:
