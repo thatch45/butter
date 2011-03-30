@@ -1,0 +1,22 @@
+# Maintainer: Thomas S Hatch <thatch45@gmail.com>
+
+pkgname=butter
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="The complex operation manager above salt"
+arch=(any)
+url="https://github.com/thatch45/butter"
+license=("APACHE")
+depends=('python2'
+         'salt')
+backup=('etc/butter/kvm')
+makedepends=()
+optdepends=()
+options=()
+source=("$pkgname-$pkgver.tar.gz")
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+
+  python2 setup.py install --root=$pkgdir/ --optimize=1
+}
