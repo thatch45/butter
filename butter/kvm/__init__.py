@@ -151,7 +151,7 @@ class KVM(object):
 
         parser.add_option('--config',
                 dest='config',
-                default='/etc/butter/kvm.conf',
+                default='/etc/butter/kvm',
                 help='Pass in an alternative path for the butter kvm'\
                     + ' configuration file; default: /etc/butter/kvm.conf')
 

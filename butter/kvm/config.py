@@ -9,7 +9,7 @@ Load up the configuration for butter
 import os
 import yaml
 
-def config(path='/etc/butter/kvm_config'):
+def config(path='/etc/butter/kvm'):
     '''
     Load up the configuration for butter kvm
     '''

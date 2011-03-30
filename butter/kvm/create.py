@@ -53,7 +53,7 @@ class Create(object):
         self.instance = self.__gen_instance()
         self.hvstat = hvstat
         self.local = self.hvstat.local
-        self.over = butter.kvm.overlay(self.opts)
+        self.over = butter.kvm.overlay.Overlay(self.opts)
 
     def __gen_instance(self):
         '''
