@@ -140,6 +140,15 @@ class Create(object):
             data = data.replace('%%PIN%%', '')
         open(conf, 'w+').write(data)
 
+    def _gen_overlay(self, host, vda):
+        '''
+        Calls the hypervisor to apply the overlay
+        '''
+        return self.local.cmd(host,
+                              'buttervm.apply_overlay',
+                              [vda, self.instance],
+                              120)
+
     def _find_hyper(self):
         '''
         Returns the hypervisor to create the vm on
@@ -219,7 +228,7 @@ class Create(object):
         conf = os.path.join(self.instance, 'config.xml')
         self.__gen_xml(vda, conf)
         # Generate the overlay
-        self._gen_overlay()
+        self._gen_overlay(h_data['hyper'], vda)
         # Pass it over to the hypervisor
         self.local.cmd(h_data['hyper'], 'buttervm.create',
             [
