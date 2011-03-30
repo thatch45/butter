@@ -38,5 +38,5 @@ The available subsystems are:'''
         sys.exit(42)
 
     {
-    'kvm': __run_kvm(),
+    'kvm': __run_kvm,
     }[sys.argv[1]]()
