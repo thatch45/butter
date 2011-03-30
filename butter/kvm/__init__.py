@@ -1,10 +1,17 @@
 '''
 Initialize interactions with the butter kvm subsytem
 '''
+# Import Python libs
 import optparse
 import sys
+import subprocess
+import os
+import time
+
+# Import third party libs
 import yaml
 
+# Import butter libs
 import butter.kvm.config
 import butter.kvm.create
 import butter.kvm.overlay
@@ -26,18 +33,9 @@ class KVM(object):
         '''
         Set up a KVM object
         '''
-        self.opts = self.__gen_opts()
+        self.opts = self.__parse()
 
-    def __gen_opts(self):
-        '''
-        Generate the options dict used by butter from cli and configuration
-        files
-        '''
-        cli = self._parse_cli()
-        opts = butter.kvm.config.config(cli['config'])
-        return opts.update(cli)
-
-    def _parse_cli(self):
+    def __parse(self):
         '''
         Parse the butter command line options
         '''
@@ -99,15 +97,16 @@ class KVM(object):
                 dest='mem',
                 type=int,
                 default=1024,
-                help='The amount of ram to give the vm in mebibytes - only read'\
-                        + ' for new virtual machines; default = 1024')
+                help='The amount of ram to give the vm in mebibytes - only'\
+                        + ' read for new virtual machines; default = 1024')
 
         parser.add_option('-d',
                 '--distro',
                 dest='distro',
                 default='arch',
-                help='The name of the operating system to use, butter will detect'\
-                        + ' and use the latest available image; default = arch')
+                help='The name of the operating system to use, butter will'\
+                        + ' detect and use the latest available image;'\
+                        + ' default = arch')
 
         parser.add_option('-e',
                 '--env',
@@ -173,8 +172,11 @@ class KVM(object):
         cli['clear_node'] = options.clear_node
         cli['config'] = options.config
 
+        cli.update(butter.kvm.config.config(cli['config']))
+
         # Figure out the fqdn
-        # This needs to be refined in case a host is not passed (for things like -Q)
+        # This needs to be refined in case a host is not passed
+        # (for things like -Q)
         dom = domain()
         host = args[-1]
         if host.endswith(dom):
@@ -187,7 +189,8 @@ class KVM(object):
             letters = butter.utils.gen_letters()
             for disk in options.pin.split(':'):
                 comps = disk.split(',')
-                disks.append({'vd' + letters[len(disks) + 1] + '.' + comps[1]),
+                disks.append({'path': os.path.join(cli['local_path'],
+                              'vd' + letters[len(disks) + 1] + '.' + comps[1]),
                               'size': comps[0],
                               'format': comps[1],
                               'filesystem': comps[2]})
@@ -218,7 +221,7 @@ class KVM(object):
         Return a butter.kvm Create object
         '''
         self._verify_opts()
-        return buter.kvm.create.Create(self.opts,
+        return butter.kvm.create.Create(self.opts,
                 butter.kvm.data.HVStat(self.opts))
 
     def query(self):
@@ -239,7 +242,6 @@ class KVM(object):
         '''
         # Each sequence should be a function in the class so that the
         # capabilities can be manipulated in a more api centric way
-        self._verify_env()
         if self.opts['create']:
             # Create Sequence
             self.create_obj().create()
@@ -255,7 +257,7 @@ class KVM(object):
             self.query()
         elif self.opts['migrate']:
             # Migrate Sequence
-            buter.kvm.migrate.Migrate(self.opts).run_logic()
+            butter.kvm.migrate.Migrate(self.opts).run_logic()
         elif self.opts['reset']:
             create = self.create_obj()
             create.destroy()
@@ -269,7 +271,7 @@ class KVMD(object):
     '''
     def __init__(self):
         self.cli = self.__parse_cli()
-        self.opts = self.__parse(conf)
+        self.opts = self.__parse(self.cli['config'])
 
     def __parse_cli(self):
         '''
@@ -294,7 +296,7 @@ class KVMD(object):
         return {'foreground': options.foreground,
                 'config': options.config}
 
-    def __parse(self):
+    def __parse(self, conf):
         '''
         Parse the clay deamon configuration file
         '''
