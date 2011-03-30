@@ -21,8 +21,8 @@ def config(path='/etc/butter/kvm_config'):
             'storage_type': 'local', # Can be 'local', 'shared', 'choose'
             'distro': 'arch', # The default distribution to use
             # A dict of network bridges bound to the respective interface
-            # name on the vm
-            'network': {'br0', 'eth0'},
+            # name on the vm and a mac addr prefix to use
+            'network': {'br0', ['eth0', '52:54:00']},
             'graphics': 'vnc', # Set to vnc or spice
             'dnsmasq': '',
             'puppet': 0,
