@@ -46,14 +46,32 @@ class HVStat(object):
         '''
         print self.system(system)
 
-    def print_avail(self):
-        '''
-        Print the available resources for all hypervisors
-        '''
-        print 'foo'
-
     def print_query(self):
         '''
         Prints out the information gathered in a clean way
         '''
-        print 'foobar'
+        out = 'Butter kvm query\n'
+        for host in self.resources:
+            out += 'Information for ' + host + ' -\n'
+            out += '    Available cpus: '\
+                + str(self.resources[host]['freecpu']) + '\n'
+            out += '    Free Memory: '\
+                + str(self.resources[host]['freemem']) + '\n'
+            out += '    Local Images: '\
+                + str(self.resources[host]['local_images']) + '\n'
+            out += '    Total cpu cores: '\
+                + str(self.resources[host]['node_info']['cpus']) + '\n'
+            out += '    Total Memory: '\
+                + str(self.resources[host]['node_info']['phymemory']) + '\n'
+            out += '  Virtual machines running on ' + host + ' -\n'
+            for name, info in self.resources[host]['vm_info'].items():
+                out += '      ' + name + ' :\n'
+                out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
+                out += '        Virtual Memory: ' + str(info['mem']) + '\n'
+                out += '        State: ' + info['state'] + '\n'
+                out += '        Graphics: ' + info['graphics']['type']\
+                    +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
+                out += '        Disks:\n'
+                for dev, path in info['disks'].items():
+                    out += '          ' + dev + ': ' + path + '\n'
+        print out
