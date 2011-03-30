@@ -26,9 +26,9 @@ class Daemon(object):
         '''
         Sets up the stamp file location
         '''
-        stamp = os.path.join(self.opts['pool'], '.stamp.p')
-        if not os.path.isdir(self.opts['pool']):
-            os.makedirs(self.opts['pool'])
+        stamp = os.path.join(self.opts['images'], '.stamp.p')
+        if not os.path.isdir(self.opts['images']):
+            os.makedirs(self.opts['images'])
         return stamp
 
     def _check_stamp(self):
@@ -73,12 +73,12 @@ class Daemon(object):
             base_name = distro + '_' + time.strftime('%Y%m%d') + '-1.'
             img_name = base_name + self.opts['format']
             sha_name = base_name + 'sha512sum'
-            img = os.path.join(self.opts['pool'], img_name)
+            img = os.path.join(self.opts['images'], img_name)
 
             if not os.path.isfile(img):
                 i_path = os.path.join(self.opts['image_source'], img_name)
                 s_path = os.path.join(self.opts['image_source'], sha_name)
-                down_d = os.path.join(self.opts['pool'], 'down.d')
+                down_d = os.path.join(self.opts['images'], 'down.d')
                 if not os.path.isdir(down_d):
                     os.makedirs(down_d)
                 cwd = os.getcwd()
@@ -131,8 +131,8 @@ class Daemon(object):
         images = {}
         while True:
             self._get_image()
-            for fn_ in os.listdir(self.opts['pool']):
-                path = os.path.join(self.opts['pool'], fn_)
+            for fn_ in os.listdir(self.opts['images']):
+                path = os.path.join(self.opts['images'], fn_)
                 if os.path.isdir(path):
                     continue
                 size = os.stat(path).st_size
@@ -160,7 +160,7 @@ class Daemon(object):
                     images[distro] = [name]
             for distro in images:
                 images[distro].sort()
-                active = os.path.join(self.opts['pool'],
+                active = os.path.join(self.opts['images'],
                         images[distro][-1])
                 active_d = active + '.d'
                 active_t = active + '.t'
@@ -173,7 +173,7 @@ class Daemon(object):
                         os.remove(os.path.join(active_t, fn_))
                 while len(images[distro]) > int(self.opts['keep_old']):
                     # Need to clean up old images
-                    destroy = os.path.join(self.opts['pool'],
+                    destroy = os.path.join(self.opts['images'],
                             images[distro].pop(0))
                     destroy_d = destroy + '.d'
                     destroy_t = destroy + '.t'

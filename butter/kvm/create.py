@@ -225,7 +225,7 @@ class Create(object):
         if not os.path.isdir(self.instance):
             os.makedirs(self.instance)
         # Get the root image
-        image = find_image(self.opts['pool'], self.opts['distro'])
+        image = find_image(self.opts['images'], self.opts['distro'])
         # Execute the logic to figure out where the root image needs to be
         vda = os.path.join(self.opts['local_path'], self.opts['fqdn'], 'vda')
         # Place the xml file

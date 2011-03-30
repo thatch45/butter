@@ -305,7 +305,7 @@ class KVMD(object):
         '''
         opts = {}
 
-        opts['pool'] = '/srv/vm/pool'
+        opts['images'] = '/srv/vm/images'
         opts['pool_size'] = '5'
         opts['keep_old'] = '2'
         opts['interval'] = '5'
