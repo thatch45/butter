@@ -3,17 +3,26 @@ Initialize command line stacks and direct them into the correct subsystem
 '''
 import sys
 import butter.kvm
+import butter.kvmd
 
 subsys = [
         'kvm',
+        'kvmd'
         ]
 
 def __run_kvm():
     '''
-    Parse the butter command line for kvm commands
+    Parse the butter command line for kvm commands and run the logic
     '''
     kvm = butter.kvm.KVM()
     kvm.run()
+
+def __run_kvmd():
+    '''
+    Parse the butter command line for kvmd commands and execute the kvm daemon
+    '''
+    kvmd = butter.kvmd.KVMD()
+    kvmd.run()
 
 def run():
     '''
@@ -39,4 +48,5 @@ The available subsystems are:'''
 
     {
     'kvm': __run_kvm,
+    'kvmd': __run_kvmd,
     }[sys.argv[1]]()
