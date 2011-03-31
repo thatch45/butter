@@ -24,6 +24,10 @@ setup(name='butter',
                      'conf/kvm',
                      'conf/kvmd',
                     ]),
+                  ('/etc/rc.d',
+                    [
+                     'init/butter-kvmd',
+                    ]),
                  ],
 
      )
