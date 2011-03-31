@@ -67,7 +67,7 @@ class KVMD(object):
 
         return opts
 
-    def daemon(self):
+    def run(self):
         '''
         Starts the buter kvm  daemon
         '''
