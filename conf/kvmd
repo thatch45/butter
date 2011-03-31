@@ -1,0 +1,9 @@
+# Configuration for the kvm daemon
+#images: /srv/vm/images
+#pool_size: 5
+#keep_old: 2
+#interval: 5
+#image_source:
+#distros: [arch]
+#format: raw
+
