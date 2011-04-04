@@ -68,6 +68,10 @@ class Create(object):
         '''
         Generates the libvirt xml file for kvm
         '''
+        # Don't generate the libvirt config if it already exists
+        if os.path.exists(conf):
+            return
+
         data = '''
 <domain type='kvm'>
         <name>%%NAME%%</name>
