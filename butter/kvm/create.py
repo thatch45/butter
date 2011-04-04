@@ -269,7 +269,7 @@ class Create(object):
             conf = raw_input('Please enter yes or no [yes/No]: ')
             if not conf.strip() == 'yes':
                 return
-        if type(h_data['hyper']) == type(set()):
+        if type(host) == type(set()):
             self.local.cmd(list(host),
                     'virt.purge',
                     [host, True],
