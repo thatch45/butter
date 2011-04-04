@@ -173,6 +173,7 @@ class Create(object):
             return ret
         elif len(hosts) == 1:
             ret['hyper'] = hosts.pop()
+            return ret
 
         # Is the hypervisor defined on the command line?
         if self.opts['hyper'] and resources.has_key(self.opts['hyper']):
