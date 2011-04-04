@@ -275,7 +275,7 @@ class Create(object):
                     [self.opts['fqdn'], True],
                     expr_form='list')
         else:
-            self.local.cmd(self.opts['fqdn'], 'virt.purge', [host, True])
+            self.local.cmd(host, 'virt.purge', [self.opts['fqdn'], True])
         if os.path.isdir(self.instance):
             shutil.rmtree(self.instance)
 
