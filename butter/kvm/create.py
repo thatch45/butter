@@ -272,7 +272,7 @@ class Create(object):
         if type(host) == type(set()):
             self.local.cmd(list(host),
                     'virt.purge',
-                    [host, True],
+                    [self.opts['fqdn'], True],
                     expr_form='list')
         else:
             self.local.cmd(host, 'virt.purge', [host, True])
