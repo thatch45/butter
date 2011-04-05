@@ -262,11 +262,9 @@ class KVM(object):
             # Migrate Sequence
             butter.kvm.migrate.Migrate(self.opts).run_logic()
         elif self.opts['reset']:
-            create = self.create_obj()
-            create.destroy()
+            self.create_obj().destroy()
             time.sleep(2)
-            create.create()
-
+            self.create_obj().create()
 
 class KVMD(object):
     '''

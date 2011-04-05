@@ -68,6 +68,10 @@ class Create(object):
         '''
         Generates the libvirt xml file for kvm
         '''
+        # Don't generate the libvirt config if it already exists
+        if os.path.exists(conf):
+            return
+
         data = '''
 <domain type='kvm'>
         <name>%%NAME%%</name>
@@ -173,6 +177,7 @@ class Create(object):
             return ret
         elif len(hosts) == 1:
             ret['hyper'] = hosts.pop()
+            return ret
 
         # Is the hypervisor defined on the command line?
         if self.opts['hyper'] and resources.has_key(self.opts['hyper']):
@@ -264,7 +269,13 @@ class Create(object):
             conf = raw_input('Please enter yes or no [yes/No]: ')
             if not conf.strip() == 'yes':
                 return
-        self.local.cmd(host, 'virt.purge', [host, True])
+        if type(host) == type(set()):
+            self.local.cmd(list(host),
+                    'virt.purge',
+                    [self.opts['fqdn'], True],
+                    expr_form='list')
+        else:
+            self.local.cmd(host, 'virt.purge', [self.opts['fqdn'], True])
         if os.path.isdir(self.instance):
             shutil.rmtree(self.instance)
 
