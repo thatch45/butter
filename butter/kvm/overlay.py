@@ -155,8 +155,10 @@ class Overlay(object):
             return False
         configs = []
         for dev, mac in self.macs.items():
-            configs.append("dhcp-host=net:%s,%s,%s,2h"%(mac,
-                dev,
+            if not dev.startswith('virt_'):
+                dev = 'virt_' + dev
+            configs.append("dhcp-host=net:%s,%s,%s,2h"%(dev,
+                mac,
                 self.opts['fqdn']))
         configs.append("")
         configs = os.linesep.join(configs)
