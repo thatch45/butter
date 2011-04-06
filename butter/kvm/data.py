@@ -153,7 +153,7 @@ class HVStat(object):
         '''
         out = 'Butter kvm query\n'
         for host in self.resources:
-            out += 'Information for ' + GREEN + host + ENDC + ' -\n'
+            out += GREEN + 'Information for ' + host + ' -' + ENDC + '\n'
             out += '    Available cpus: '\
                 + str(self.resources[host]['freecpu']) + '\n'
             out += '    Free Memory: '\
@@ -166,7 +166,7 @@ class HVStat(object):
                 + str(self.resources[host]['node_info']['phymemory']) + '\n'
             out += '  Virtual machines running on ' + host + ' -\n'
             for name, info in self.resources[host]['vm_info'].items():
-                out += '      ' + CYAN + name + ENDC + ' -\n'
+                out += '      ' + CYAN + name + ' -' + ENDC + '\n'
                 out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                 out += '        Virtual Memory: ' + str(info['mem']) + '\n'
                 out += '        State: ' + info['state'] + '\n'
