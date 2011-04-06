@@ -103,7 +103,7 @@ class HVStat(object):
         empty string if it is not present
         '''
         for host in self.resources:
-            if self.resources[host].has_key(vm_):
+            if self.resources[host]['vm_info'].has_key(vm_):
                 return host
         return ''
 

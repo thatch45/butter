@@ -53,12 +53,26 @@ class Migrate(object):
               + ' the order of hours to complete, and butter will block,'\
               + ' waiting for completion.'
 
-        print self.local.cmd(m_data['from'],
+        self.local.cmd(m_data['from'],
                 'virt.migrate_non_shared',
                 [name, m_data['to']],
                 timeout=7200)
 
-        print 'Finished migrating ' + name
+        # Verify migration
+        self.data.refresh_resources()
+        loc = self.data.find_vm(name)
+        if not loc == m_data['to']:
+            # Migration failed!!
+            print 'Migration appears to have failed, please check the'\
+                + ' hypervisors manually'
+        else:
+            for disk, info in self.data.resources[loc]['vm_info'][name]['disks'].items():
+            cmd = 'rm -rf ' + os.path.dirname(info['file']) 
+            print cmd
+            #self.local.cmd(m_data['from'],
+            #        'cmd.run',
+            #        [cmd])
+            print 'Finished migrating ' + name
         return True
 
     def clear_node(self):
