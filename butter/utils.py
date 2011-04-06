@@ -67,7 +67,7 @@ def gen_mac(prefix=''):
     '''
     Generates a mac addr with the defined prefix
     '''
-    src = ['1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F']
+    src = ['1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f']
     mac = prefix
     while len(mac) < 18:
         if len(mac) < 3:
