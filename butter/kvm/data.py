@@ -117,11 +117,12 @@ class HVStat(object):
                     +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                 out += '        Disks:\n'
                 for dev, data in info['disks'].items():
-                    out += '          Path: ' + data['image'] + '\n'
-                    out += '          Disk Size: ' + data['disk size'] + '\n'
-                    out += '          Virtual Size: ' + data['virtual size']\
+                    out += '          # Device - ' + dev + ' #\n'
+                    out += '            Path: ' + data['image'] + '\n'
+                    out += '            Disk Size: ' + data['disk size'] + '\n'
+                    out += '            Virtual Size: ' + data['virtual size']\
                         +  '\n'
-                    out += '          Format: ' + data['file format'] + '\n'
+                    out += '            Format: ' + data['file format'] + '\n'
         print out
 
     def print_query(self):
@@ -152,9 +153,10 @@ class HVStat(object):
                     +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                 out += '        Disks:\n'
                 for dev, data in info['disks'].items():
-                    out += '          Path: ' + data['image'] + '\n'
-                    out += '          Disk Size: ' + data['disk size'] + '\n'
-                    out += '          Virtual Size: ' + data['virtual size']\
+                    out += '          # Device - ' + dev + ' #\n'
+                    out += '            Path: ' + data['image'] + '\n'
+                    out += '            Disk Size: ' + data['disk size'] + '\n'
+                    out += '            Virtual Size: ' + data['virtual size']\
                         +  '\n'
-                    out += '          Format: ' + data['file format'] + '\n'
+                    out += '            Format: ' + data['file format'] + '\n'
         print out
