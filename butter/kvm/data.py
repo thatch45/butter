@@ -4,6 +4,28 @@ This module is used to gather the live state data used by butter via salt
 # Import salt client
 import salt.client
 
+# Set up the bash output colors
+BLACK = "\[\033[0;30m\]"
+DARK_GRAY = "\[\033[1;30m\]"
+LIGHT_GRAY = "\[\033[0;37m\]"
+BLUE = "\[\033[0;34m\]"
+LIGHT_BLUE = "\[\033[1;34m\]"
+GREEN = "\[\033[0;32m\]"
+LIGHT_GREEN = "\[\033[1;32m\]"
+CYAN = "\[\033[0;36m\]"
+LIGHT_CYAN = "\[\033[1;36m\]"
+RED = "\[\033[0;31m\]"
+LIGHT_RED = "\[\033[1;31m\]"
+PURPLE = "\[\033[0;35m\]"
+LIGHT_PURPLE = "\[\033[1;35m\]"
+BROWN = "\[\033[0;33m\]"
+YELLOW = "\[\033[1;33m\]"
+WHITE = "\[\033[1;37m\]"
+DEFAULT_COLOR = "\[\033[00m\]"
+RED_BOLD = "\[\033[01;31m\]"
+GREEN = "\[\033[0;32m\]"
+ENDC = '\033[0m'
+
 class HVStat(object):
     '''
     Detects information about the hypervisors
@@ -132,7 +154,7 @@ class HVStat(object):
         out = 'Butter kvm query\n'
         for host in self.resources:
             out += '#######################################################\n'
-            out += 'Information for ' + host + ' -\n'
+            out += 'Information for ' + GREEN + host + ENDC + ' -\n'
             out += '    Available cpus: '\
                 + str(self.resources[host]['freecpu']) + '\n'
             out += '    Free Memory: '\
@@ -145,7 +167,7 @@ class HVStat(object):
                 + str(self.resources[host]['node_info']['phymemory']) + '\n'
             out += '  Virtual machines running on ' + host + ' -\n'
             for name, info in self.resources[host]['vm_info'].items():
-                out += '      ' + name + ' -\n'
+                out += '      ' + CYAN + name + ENDC + ' -\n'
                 out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                 out += '        Virtual Memory: ' + str(info['mem']) + '\n'
                 out += '        State: ' + info['state'] + '\n'
@@ -153,7 +175,7 @@ class HVStat(object):
                     +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                 out += '        Disks:\n'
                 for dev, data in info['disks'].items():
-                    out += '          # Device - ' + dev + ' #\n'
+                    out += RED + '          ' + dev + ENDC + '\n'
                     out += '            Path: ' + data['image'] + '\n'
                     out += '            Disk Size: ' + data['disk size'] + '\n'
                     out += '            Virtual Size: ' + data['virtual size']\
