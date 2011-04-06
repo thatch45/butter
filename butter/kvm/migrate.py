@@ -1,9 +1,11 @@
 '''
 Frontend for running vm migration
 '''
-# import clay libs
-import butter.kvm.data
-import butter.kvm.create
+# import butter libs
+import butter.kvm.dat
+
+# Import salt libs
+import salt.client
 
 class Migrate(object):
     '''
@@ -11,6 +13,7 @@ class Migrate(object):
     '''
     def __init__(self, opts):
         self.opts = opts
+        self.local = salt.client.LocalClient()
         self.data = butter.kvm.data.HVStat()
 
     def run_logic(self):
@@ -22,38 +25,30 @@ class Migrate(object):
         else:
             self.migrate()
 
-    def migrate(self, name=''):
+    def migrate(self):
         '''
         Migrate a virtual machine to the specified destoination.
         '''
-        if not name and self.opts['fqdn']:
-            name = self.opts['fqdn']
-        else:
-            raise ValueError('Attemting to migrate without a vm name')
-        
-        m_data = self.data.migration_data(name, self.opts['hyper'])
+        disks = {}
+        for hyper in self.data.resources:
+            if self.data.resources[hyper]['vm_info'].has_key(self.opts['fqdn']):
+                disks = self.data.resources[hyper]['vm_info'][self.opts['fqdn']]['disks']
+        if not disks:
+            return 'Failed to find specified virtual machine'
+        m_data = self.data.migration_data(self.opts['fqdn'], self.opts['hyper'])
 
-        src = fc.Overlord(m_data['from'], timeout=7200)
-        tgt = fc.Overlord(m_data['to'])
-
-        # retrive the information about blocks on the vm
-        blocks = src.clayvm.get_blocks_data(name)[m_data['from']]
         # Prepare the target hyper to have the correct block devices
-        tgt.clayvm.set_migrate_seed(
-                clay.create.find_image(self.opts['pool'], self.opts['distro']),
-                blocks)
+        self.local.cmd(m_data['to'],
+                'virt.seed_non_shared_migrate',
+                [disks, True],
+                timeout=7200)
 
         # execute migration
         print 'Migrating ' + name + ' from ' + m_data['from'] + ' to '\
               + m_data['to'] + '. Be advised that some migrations can take on'\
               + ' the order of hours to complete, and clay will block,'\
               + ' waiting for completion.'
-        m_cmd = 'virsh migrate --live --copy-storage-inc ' + name\
-              + ' qemu://' + m_data['to'] + '/system'
-        src.command.run(m_cmd)
-        # Verify that the migrate was good, then call a command to move the 
-        # drives out of place on the src machine into a temp dir that gets
-        # watched by say, tempwatch
+
         print 'Finished migrating ' + name
 
     def clear_node(self):
