@@ -25,23 +25,27 @@ class Migrate(object):
         else:
             self.migrate()
 
-    def migrate(self):
+    def migrate(self, name=''):
         '''
         Migrate a virtual machine to the specified destoination.
         '''
+        if not name:
+            name = self.opts['fqdn']
         disks = {}
         for hyper in self.data.resources:
-            if self.data.resources[hyper]['vm_info'].has_key(self.opts['fqdn']):
-                disks = self.data.resources[hyper]['vm_info'][self.opts['fqdn']]['disks']
+            if self.data.resources[hyper]['vm_info'].has_key(name):
+                disks = self.data.resources[hyper]['vm_info'][name]['disks']
         if not disks:
             return 'Failed to find specified virtual machine'
-        m_data = self.data.migration_data(self.opts['fqdn'], self.opts['hyper'])
+        m_data = self.data.migration_data(name, self.opts['hyper'])
 
         # Prepare the target hyper to have the correct block devices
-        self.local.cmd(m_data['to'],
+        ret = self.local.cmd(m_data['to'],
                 'virt.seed_non_shared_migrate',
-                [disks, True],
-                timeout=7200)
+                [disks, True])
+        if not ret:
+            print 'Failed to set up the migration seed on ' + m_data['to']
+            return False
 
         # execute migration
         print 'Migrating ' + name + ' from ' + m_data['from'] + ' to '\
@@ -49,7 +53,13 @@ class Migrate(object):
               + ' the order of hours to complete, and clay will block,'\
               + ' waiting for completion.'
 
+        print self.local.cmd(m_data['from'],
+                'virt.migrate_non_shared',
+                [name, m_data['to']],
+                timeout=7200)
+
         print 'Finished migrating ' + name
+        return True
 
     def clear_node(self):
         '''
@@ -59,10 +69,10 @@ class Migrate(object):
         if not self.opts['clear_node']:
             raise ValueError('Please specify the node to clear with'\
                 + ' --clear-node=<nodename>')
-        print 'Retriving initial migration information'
-        resources = self.data.resources()
-        if not resources.has_key(self.opts['clean_node']):
+        if not self.data.resources.has_key(self.opts['clean_node']):
             raise ValueError('Specified node to migrate all vms off of is'\
                 + ' not present')
         for vm_ in resources[self.opts['clean_node']]['vms']:
+            # Refresh the migration resources
+            self.data.refresh_resources()
             self.migrate(vm_)
