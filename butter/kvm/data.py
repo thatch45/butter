@@ -47,6 +47,35 @@ class HVStat(object):
         '''
         self.__refresh_resources()
 
+    def migration_data(self, name, hyper=''):
+        '''
+        Parse over the resources data to retrieve the migration information,
+        pass the name of a vm to get migration data for, and an optional
+        hypervisor to send the vm to.
+        '''
+        m_data = {}
+        for host in self.resources:
+            if self.resources[host]['vm_info'].has_key(name):
+                m_data['from'] = host
+        if not hyper:
+            best = (-10000, -1000000, 1000000)
+            for host in self.resources:
+                if self.resources[host]['node_info']['cpus'] > best[0]:
+                    if self.resources[host]['freemem'] > best[1]:
+                        if len(self.resources[host]['vm_info']) < best[2]:
+                            best = (self.resources[host]['node_info']['cpus'],
+                                    self.resources[host]['freemem'],
+                                    len(self.resources[host]['vm_info']))
+                            m_data['to'] = host
+        else:
+            if self.resources.has_key(hyper):
+                m_data['to'] = hyper
+            else:
+                return {}
+        if not m_data.has_key('to') and not m_data.has_key('from'):
+            return {}
+        return m_data
+
     def print_system(self, system):
         '''
         Prints out the data to a console about a specific system
