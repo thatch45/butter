@@ -50,7 +50,7 @@ class Migrate(object):
         # execute migration
         print 'Migrating ' + name + ' from ' + m_data['from'] + ' to '\
               + m_data['to'] + '. Be advised that some migrations can take on'\
-              + ' the order of hours to complete, and clay will block,'\
+              + ' the order of hours to complete, and butter will block,'\
               + ' waiting for completion.'
 
         print self.local.cmd(m_data['from'],

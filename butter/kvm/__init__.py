@@ -285,7 +285,7 @@ class KVMD(object):
                 default=False,
                 action='store_true',
                 dest='foreground',
-                help='Run the clay daemon in the foreground')
+                help='Run the butter kvm daemon in the foreground')
 
         parser.add_option('-c',
                 '--config',
@@ -300,7 +300,7 @@ class KVMD(object):
 
     def __parse(self, conf):
         '''
-        Parse the clay deamon configuration file
+        Parse the butter kvm deamon configuration file
         '''
         opts = {}
 
