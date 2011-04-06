@@ -126,6 +126,7 @@ class HVStat(object):
         '''
         out = 'Butter kvm query\n'
         for host in self.resources:
+            out += '#######################################################'
             out += 'Information for ' + host + ' -\n'
             out += '    Available cpus: '\
                 + str(self.resources[host]['freecpu']) + '\n'
@@ -146,6 +147,10 @@ class HVStat(object):
                 out += '        Graphics: ' + info['graphics']['type']\
                     +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                 out += '        Disks:\n'
-                for dev, path in info['disks'].items():
-                    out += '          ' + dev + ': ' + path + '\n'
+                for dev, data in info['disks'].items():
+                    out += '          Path: ' + data['image'] + '\n'
+                    out += '          Disk Size: ' + data['disk size'] + '\n'
+                    out += '          Virtual Size: ' + data['virtual size']\
+                        +  '\n'
+                    out += '          Format: ' + data['file format'] + '\n'
         print out
