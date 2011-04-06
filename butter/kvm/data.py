@@ -125,8 +125,13 @@ class HVStat(object):
                     out += '        Graphics: ' + info['graphics']['type']\
                         +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                     out += '        Disks:\n'
-                    for dev, path in info['disks'].items():
-                        out += '          ' + dev + ': ' + path + '\n'
+                    for dev, data in info['disks'].items():
+                        out += RED + '          ' + dev + ENDC + '\n'
+                        out += '            Path: ' + data['image'] + '\n'
+                        out += '            Disk Size: ' + data['disk size'] + '\n'
+                        out += '            Virtual Size: ' + data['virtual size']\
+                            +  '\n'
+                        out += '            Format: ' + data['file format'] + '\n'
             elif self.resources[host]['vm_info'].has_key(system):
                 out += 'Virtual machine running on host ' + host + '\n'
                 name = system
