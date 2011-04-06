@@ -15,6 +15,7 @@ import yaml
 import butter.kvm.config
 import butter.kvm.create
 import butter.kvm.overlay
+import butter.kvm.migrate
 
 def domain():
     '''

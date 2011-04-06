@@ -2,7 +2,7 @@
 Frontend for running vm migration
 '''
 # import butter libs
-import butter.kvm.dat
+import butter.kvm.data
 
 # Import salt libs
 import salt.client
@@ -14,7 +14,7 @@ class Migrate(object):
     def __init__(self, opts):
         self.opts = opts
         self.local = salt.client.LocalClient()
-        self.data = butter.kvm.data.HVStat()
+        self.data = butter.kvm.data.HVStat(self.opts)
 
     def run_logic(self):
         '''
