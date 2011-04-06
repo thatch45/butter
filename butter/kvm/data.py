@@ -97,6 +97,16 @@ class HVStat(object):
             return {}
         return m_data
 
+    def find_vm(self, vm_):
+        '''
+        Search the resources for a vm and return the hypervisor it is on, or an
+        empty string if it is not present
+        '''
+        for host in self.resources:
+            if self.resources[host].has_key(vm_):
+                return host
+        return ''
+
     def print_system(self, system):
         '''
         Prints out the data to a console about a specific system
