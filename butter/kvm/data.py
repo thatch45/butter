@@ -131,7 +131,7 @@ class HVStat(object):
         '''
         out = 'Butter kvm query\n'
         for host in self.resources:
-            out += '#######################################################'
+            out += '#######################################################\n'
             out += 'Information for ' + host + ' -\n'
             out += '    Available cpus: '\
                 + str(self.resources[host]['freecpu']) + '\n'
