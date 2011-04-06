@@ -25,6 +25,13 @@ class HVStat(object):
                 hypers.add(hyper)
         return list(hypers)
 
+    def __refresh_resources(self):
+        '''
+        Sometimes the state data needs to be refreshed mid opperation, this is
+        the private method to do so
+        '''
+        self.resources = self.get_resources()
+
     def get_resources(self):
         '''
         Return the full resources information about the cloud
@@ -33,6 +40,12 @@ class HVStat(object):
                 'butterkvm.full_butter_data',
                 arg=[self.opts['local_path']],
                 expr_form='list')
+
+    def refresh_resources(self):
+        '''
+        Call salt to refresh the stored state data about hypervisors
+        '''
+        self.__refresh_resources()
 
     def print_system(self, system):
         '''
