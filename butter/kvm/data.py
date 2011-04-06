@@ -23,7 +23,6 @@ YELLOW = '\033[1;33m'
 WHITE = '\033[1;37m'
 DEFAULT_COLOR = '\033[00m'
 RED_BOLD = '\033[01;31m'
-GREEN = '\033[0;32m'
 ENDC = '\033[0m'
 
 class HVStat(object):
@@ -105,20 +104,21 @@ class HVStat(object):
         out = 'Butter kvm query\n'
         for host in self.resources:
             if host == system:
-                out += 'Information for ' + host + ' -\n'
+                out += GREEN + 'Information for ' + host + ' -' + ENDC + '\n'
                 out += '    Available cpus: '\
                     + str(self.resources[host]['freecpu']) + '\n'
                 out += '    Free Memory: '\
                     + str(self.resources[host]['freemem']) + '\n'
-                out += '    Local Images: '\
-                    + str(self.resources[host]['local_images']) + '\n'
                 out += '    Total cpu cores: '\
                     + str(self.resources[host]['node_info']['cpus']) + '\n'
                 out += '    Total Memory: '\
                     + str(self.resources[host]['node_info']['phymemory']) + '\n'
+                out += '    Local Images: ' + '\n'
+                for img in self.resources[host]['local_images']:
+                    out += LIGHT_RED + '      ' + img + ENDC + '\n'
                 out += '  Virtual machines running on ' + host + ' -\n'
                 for name, info in self.resources[host]['vm_info'].items():
-                    out += '      ' + name + ' -\n'
+                    out += '      ' + CYAN + name + ' -' + ENDC + '\n'
                     out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                     out += '        Virtual Memory: ' + str(info['mem']) + '\n'
                     out += '        State: ' + info['state'] + '\n'
@@ -131,7 +131,7 @@ class HVStat(object):
                 out += 'Virtual machine running on host ' + host + '\n'
                 name = system
                 info = self.resources[host]['vm_info'][system]
-                out += '      ' + name + ' -\n'
+                out += '      ' + CYAN + name + ' -' + ENDC + '\n'
                 out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                 out += '        Virtual Memory: ' + str(info['mem']) + '\n'
                 out += '        State: ' + info['state'] + '\n'
@@ -139,7 +139,7 @@ class HVStat(object):
                     +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                 out += '        Disks:\n'
                 for dev, data in info['disks'].items():
-                    out += '          # Device - ' + dev + ' #\n'
+                    out += RED + '          ' + dev + ENDC + '\n'
                     out += '            Path: ' + data['image'] + '\n'
                     out += '            Disk Size: ' + data['disk size'] + '\n'
                     out += '            Virtual Size: ' + data['virtual size']\
@@ -158,12 +158,13 @@ class HVStat(object):
                 + str(self.resources[host]['freecpu']) + '\n'
             out += '    Free Memory: '\
                 + str(self.resources[host]['freemem']) + '\n'
-            out += '    Local Images: '\
-                + str(self.resources[host]['local_images']) + '\n'
             out += '    Total cpu cores: '\
                 + str(self.resources[host]['node_info']['cpus']) + '\n'
             out += '    Total Memory: '\
                 + str(self.resources[host]['node_info']['phymemory']) + '\n'
+            out += '    Local Images: ' + '\n'
+            for img in self.resources[host]['local_images']:
+                out += LIGHT_RED + '      ' + img + ENDC + '\n'
             out += '  Virtual machines running on ' + host + ' -\n'
             for name, info in self.resources[host]['vm_info'].items():
                 out += '      ' + CYAN + name + ' -' + ENDC + '\n'
