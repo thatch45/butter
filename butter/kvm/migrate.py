@@ -1,7 +1,9 @@
 '''
 Frontend for running vm migration
 '''
-# import butter libs
+# Import python libs
+import os
+# Import butter libs
 import butter.kvm.data
 
 # Import salt libs
