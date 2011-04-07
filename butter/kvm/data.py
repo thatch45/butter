@@ -92,7 +92,7 @@ class HVStat(object):
         '''
         Prints out the data to a console about a specific system
         '''
-        out = 'Butter kvm query\n'
+        out = ''
         for host in sorted(self.resources):
             if host == system:
                 out += utils.GREEN + 'Information for ' + host + ' -' + utils.ENDC + '\n'
@@ -147,7 +147,7 @@ class HVStat(object):
         '''
         Prints out the information gathered in a clean way
         '''
-        out = 'Butter kvm query\n'
+        out = ''
         for host in sorted(self.resources):
             out += utils.GREEN + 'Information for ' + host + ' -' + utils.ENDC + '\n'
             out += '    Available cpus: '\
