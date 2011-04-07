@@ -59,9 +59,13 @@ class HVStat(object):
         for host in self.resources:
             if self.resources[host]['vm_info'].has_key(name):
                 m_data['from'] = host
+        if not m_data.has_key('from'):
+            return {}
         if not hyper:
             best = (-10000, -1000000, 1000000)
             for host in self.resources:
+                if host == m_data['from']:
+                    continue
                 if self.resources[host]['node_info']['cpus'] > best[0]:
                     if self.resources[host]['freemem'] > best[1]:
                         if len(self.resources[host]['vm_info']) < best[2]:
