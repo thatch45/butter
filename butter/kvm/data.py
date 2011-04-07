@@ -93,7 +93,7 @@ class HVStat(object):
         Prints out the data to a console about a specific system
         '''
         out = 'Butter kvm query\n'
-        for host in self.resources:
+        for host in sorted(self.resources):
             if host == system:
                 out += utils.GREEN + 'Information for ' + host + ' -' + utils.ENDC + '\n'
                 out += '    Available cpus: '\
@@ -108,7 +108,7 @@ class HVStat(object):
                 for img in self.resources[host]['local_images']:
                     out += utils.LIGHT_RED + '      ' + img + utils.ENDC + '\n'
                 out += '  Virtual machines running on ' + host + ' -\n'
-                for name, info in self.resources[host]['vm_info'].items():
+                for name, info in sorted(self.resources[host]['vm_info'].items()):
                     out += '      ' + utils.CYAN + name + ' -' + utils.ENDC + '\n'
                     out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                     out += '        Virtual Memory: ' + str(info['mem']) + '\n'
@@ -116,7 +116,7 @@ class HVStat(object):
                     out += '        Graphics: ' + info['graphics']['type']\
                         +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                     out += '        Disks:\n'
-                    for dev, data in info['disks'].items():
+                    for dev, sorted(data in info['disks'].items()):
                         out += utils.RED + '          ' + dev + utils.ENDC + '\n'
                         out += '            Path: ' + data['image'] + '\n'
                         out += '            Disk Size: ' + data['disk size'] + '\n'
@@ -134,7 +134,7 @@ class HVStat(object):
                 out += '        Graphics: ' + info['graphics']['type']\
                     +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                 out += '        Disks:\n'
-                for dev, data in info['disks'].items():
+                for dev, data in sorted(info['disks'].items()):
                     out += utils.RED + '          ' + dev + utils.ENDC + '\n'
                     out += '            Path: ' + data['image'] + '\n'
                     out += '            Disk Size: ' + data['disk size'] + '\n'
@@ -148,7 +148,7 @@ class HVStat(object):
         Prints out the information gathered in a clean way
         '''
         out = 'Butter kvm query\n'
-        for host in self.resources:
+        for host in sorted(self.resources):
             out += utils.GREEN + 'Information for ' + host + ' -' + utils.ENDC + '\n'
             out += '    Available cpus: '\
                 + str(self.resources[host]['freecpu']) + '\n'
@@ -162,7 +162,7 @@ class HVStat(object):
             for img in self.resources[host]['local_images']:
                 out += utils.LIGHT_RED + '      ' + img + utils.ENDC + '\n'
             out += '  Virtual machines running on ' + host + ' -\n'
-            for name, info in self.resources[host]['vm_info'].items():
+            for name, info in sorted(self.resources[host]['vm_info'].items()):
                 out += '      ' + utils.CYAN + name + ' -' + utils.ENDC + '\n'
                 out += '        Virtual CPUS: ' + str(info['cpu']) + '\n'
                 out += '        Virtual Memory: ' + str(info['mem']) + '\n'
@@ -170,7 +170,7 @@ class HVStat(object):
                 out += '        Graphics: ' + info['graphics']['type']\
                     +  ' - ' + host + ':' + info['graphics']['port'] + '\n'
                 out += '        Disks:\n'
-                for dev, data in info['disks'].items():
+                for dev, data in sorted(info['disks'].items()):
                     out += utils.RED + '          ' + dev + utils.ENDC + '\n'
                     out += '            Path: ' + data['image'] + '\n'
                     out += '            Disk Size: ' + data['disk size'] + '\n'
