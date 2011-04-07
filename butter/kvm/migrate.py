@@ -67,13 +67,13 @@ class Migrate(object):
             # Migration failed!!
             print 'Migration appears to have failed, please check the'\
                 + ' hypervisors manually'
+            return False
         else:
             for disk, info in self.data.resources[loc]['vm_info'][name]['disks'].items():
                 cmd = 'rm -rf ' + os.path.dirname(info['file']) 
-                print cmd
-                #self.local.cmd(m_data['from'],
-                #        'cmd.run',
-                #        [cmd])
+                self.local.cmd(m_data['from'],
+                        'cmd.run',
+                        [cmd])
             print 'Finished migrating ' + name
         return True
 
