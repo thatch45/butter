@@ -243,7 +243,7 @@ class Create(object):
             timeout=240,
             )
         # Verify that the vm was created
-        self.data.refresh_resources()
+        self.hvstat.refresh_resources()
         created = self.data.find_vm(self.opts['fqdn'])
         if not created:
             print 'Failed to create the virtual machine'
