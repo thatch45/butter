@@ -124,7 +124,7 @@ class HVStat(object):
                             +  '\n'
                         out += '            Format: ' + data['file format'] + '\n'
             elif self.resources[host]['vm_info'].has_key(system):
-                out += utils.Green + 'Virtual machine running on host ' + host + '\n'
+                out += utils.GREEN + 'Virtual machine running on host ' + host + '\n'
                 name = system
                 info = self.resources[host]['vm_info'][system]
                 out += '      ' + utils.CYAN + name + ' -' + utils.ENDC + '\n'
