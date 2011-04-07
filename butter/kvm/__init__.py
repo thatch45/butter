@@ -118,7 +118,7 @@ class KVM(object):
                     + ' vm. The pinned vm image will be created on the'\
                     + ' hypervisor. The pin option is a collection of options'\
                     + ' delimited by commas. The option to pass is: '\
-                    + ' <image_path>::<size in GB>,<format(raw/qcow2)>,<fs(ext4/xfs)>'\
+                    + ' <size in GB>,<format(raw/qcow2)>,<fs(ext4/xfs)>'\
                     + ':<size in GB>,<format(raw/qcow2)>,<fs(ext4/xfs)>, etc.')
 
         parser.add_option('-e',
