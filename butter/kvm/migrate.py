@@ -47,6 +47,7 @@ class Migrate(object):
             #self.local.cmd(m_data['from'],
             #        'cmd.run',
             #        [cmd])
+        return False
 
     def run_logic(self):
         '''
@@ -99,8 +100,11 @@ class Migrate(object):
                 + ' hypervisors manually'
             return False
         else:
-            self._clean_disks(name, m_data)
-            print 'Finished migrating ' + name
+            if not self._clean_disks(name, m_data):
+                print 'Migration completed, but the disks still remain on '\
+                    + m_data['from'] + ', they must be cleaned manually.'
+            else:
+                print 'Finished migrating ' + name
         return True
 
     def clear_node(self):
