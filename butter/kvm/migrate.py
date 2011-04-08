@@ -37,9 +37,16 @@ class Migrate(object):
             return False
         # Vm has DEFINATELY migrated and there are files on 'from' that need to
         # be cleaned up
-        return self.local.cmd(m_data['from'],
-                'butterkvm.clean_images',
-                [name])
+        if frm['vm_info'].has_key(name):
+            # There is a vm on from by the name of the migrated vm
+            return False
+        if frm['vm_info']['local_images'].count(name):
+            # The image is here but no vm with it
+            cmd = 'rm -rf ' + os.path.join(self.opts['local_path'], name)
+            print cmd
+            #self.local.cmd(m_data['from'],
+            #        'cmd.run',
+            #        [cmd])
 
     def run_logic(self):
         '''
