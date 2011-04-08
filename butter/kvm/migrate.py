@@ -18,6 +18,29 @@ class Migrate(object):
         self.local = salt.client.LocalClient()
         self.data = butter.kvm.data.HVStat(self.opts)
 
+    def _clean_disks(self, name, m_data):
+        '''
+        Check the migration data and clean out any unused disks post migration
+        This method should only be called after verification that the virtual
+        machine has migrated and the local data var has a fresh resource set.
+        '''
+        if self.opts['instances'] == self.opts['local_path']:
+            # The disks are located on shared storage, do nothing and return
+            return True
+        # The disks are located on local storage, verify that the disks on the
+        # from vm are not in use and that the correct disk directory is being
+        # called, then delete the directory.
+        frm = self.data.resources[m_data['from']]
+        to_ = self.data.resources[m_data['to']]
+        # Verify that the state of the vm on 'to' is running
+        if not to_['vm_info'][name]['state'] == 'running':
+            return False
+        # Vm has DEFINATELY migrated and there are files on 'from' that need to
+        # be cleaned up
+        return self.local.cmd(m_data['from'],
+                'butterkvm.clean_images',
+                [name])
+
     def run_logic(self):
         '''
         Read the opts structure and determine how to execute
@@ -69,11 +92,7 @@ class Migrate(object):
                 + ' hypervisors manually'
             return False
         else:
-            for disk, info in self.data.resources[loc]['vm_info'][name]['disks'].items():
-                cmd = 'rm -rf ' + os.path.dirname(info['file']) 
-                self.local.cmd(m_data['from'],
-                        'cmd.run',
-                        [cmd])
+            self._clean_disks(name, m_data)
             print 'Finished migrating ' + name
         return True
 
