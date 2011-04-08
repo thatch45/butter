@@ -195,7 +195,8 @@ class KVM(object):
             for disk in options.pin.split(':'):
                 comps = disk.split(',')
                 disks.append({'path': os.path.join(cli['local_path'],
-                              'vd' + letters[len(disks) + 1] + '.' + comps[1]),
+                                cli['fqdn'],
+                                'vd' + letters[len(disks) + 1]),
                               'size': comps[0],
                               'format': comps[1],
                               'filesystem': comps[2]})
