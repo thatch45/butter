@@ -84,7 +84,7 @@ def gen_letters():
             lets.append(alet + blet)
     return lets
 
-def gen_mac(prefix=''):
+def gen_mac(prefix='52:54:'):
     '''
     Generates a mac addr with the defined prefix
     '''
