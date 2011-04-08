@@ -47,6 +47,18 @@ class Overlay(object):
             if os.path.isfile(dnsmasq_conf):
                 for line in open(dnsmasq_conf, 'r').readlines():
                     comps = line.split(',')
+                    dev = comps[0][comps[0].index(':') + 1:]
+                    mac = comps[1]
+                    if self.opts['network'].keys().count(dev):
+                        # The device exists in the configured network,
+                        # take it as is
+                        macs[dev] = mac
+                    elif dev.startswith('virt_'):
+                        # We have munged the dhcpcd config with a virt_ network
+                        macs[dev[dev.index('_') +1 :]] = mac
+                    else:
+                        # Something odd is going on, return it as it is
+                        macs[dev] = mac
                     macs[comps[1]] = comps[0][comps[0].index(':') + 1:]
                 return macs
         for bridge, dev in self.opts['network'].items():
