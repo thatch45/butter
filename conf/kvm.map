@@ -1,0 +1,19 @@
+# An example butter kvm map file, the buter kvm map file is used to define a
+# set of virtual machines which are then loaded into butter.
+#
+# Simple vm example:
+example.foo.bar:
+  cpus: 1
+  mem: 1024
+  distro: arch
+  pin: 100,raw,ext4:20,qcow2,xfs
+  env: production
+  hyper: server1.foo.bar
+
+# An even simplier vm example
+example2.boo.bar:
+  cpus: 3
+  mem: 2048
+  distro: centos
+  env: main
+
