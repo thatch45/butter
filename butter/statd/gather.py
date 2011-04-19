@@ -3,10 +3,19 @@ The stats gathering sequence
 '''
 # Import python modules
 import os
+import distutils.sysconfig
 # Import salt modules
 import salt.client
 # Import butter modules
 import butter.statd.maint
+
+# Import cython 
+cython_enable = False
+try:
+    import pyximport; pyximport.install()
+    cython_enable = True
+except:
+    pass
 
 class Gather(object):
     '''
