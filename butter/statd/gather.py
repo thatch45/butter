@@ -65,4 +65,8 @@ class Gather(object):
 
         return maint
 
-    
+    def stat_cmd(self):
+        '''
+        Execute the salt command to inform the minions to return stats
+        '''
+
