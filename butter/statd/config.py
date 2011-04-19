@@ -14,7 +14,9 @@ def config(path='/etc/butter/statd'):
     Load up the configuration for butter kvm
     '''
     opts = {'interval': 30,
-            'data': {'status.status_all': []},
+            'commnads': ['status.status_all'],
+            'keep_data': 365,
+            'returner': 'redis',
             }
     if os.path.isfile(path):
         try:
