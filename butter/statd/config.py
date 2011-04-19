@@ -16,7 +16,7 @@ def config(path='/etc/butter/statd'):
     opts = {'interval': 30,
             'commnads': ['status.status_all'],
             'keep_data': 365,
-            'returner': 'redis',
+            'returner': 'redis_return',
             }
     if os.path.isfile(path):
         try:
