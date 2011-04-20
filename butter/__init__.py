@@ -7,7 +7,8 @@ import butter.kvmd
 
 subsys = [
         'kvm',
-        'kvmd'
+        'kvmd',
+        'statd',
         ]
 
 def __run_kvm():
@@ -23,6 +24,13 @@ def __run_kvmd():
     '''
     kvmd = butter.kvmd.KVMD()
     kvmd.run()
+
+def __run_statd():
+    '''
+    Parse the statd command line and kick off the butter statd daemon
+    '''
+    statd = butter.statd.StatD()
+    statd.run()
 
 def run():
     '''
@@ -49,4 +57,5 @@ The available subsystems are:'''
     {
     'kvm': __run_kvm,
     'kvmd': __run_kvmd,
+    'statd': __run_statd,
     }[sys.argv[1]]()
