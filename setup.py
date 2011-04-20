@@ -15,6 +15,7 @@ setup(name='butter',
                 'butter',
                 'butter.kvm',
                 'butter.kvmd',
+                'butter.statd',
                 ],
       scripts=[
                'scripts/butter',
