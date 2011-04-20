@@ -69,4 +69,28 @@ class Gather(object):
         '''
         Execute the salt command to inform the minions to return stats
         '''
+        cmd = [self.opts['target'],
+               self.opts['cmd'],
+               self.opts['arg'],
+               0,
+               self.opts['target_type'],
+               self.opts['returner']]
+
+        self.local.cmd(*cmd)
+
+    def maintain(self):
+        '''
+        Run the maintainer functions
+        '''
+        if self.maint.has_key(self.opts['returner']):
+            self.maint[self.opts['returner']].clean_old()
+
+    def loop(self):
+        '''
+        Run the salt stat command loop
+        '''
+        while True:
+            self.stat_cmd()
+            time.sleep(self.opts['interval'])
+            self.maintain()
 
