@@ -18,6 +18,7 @@ def config(path='/etc/butter/statd'):
             'commands': {'status.status_all': []},
             'keep_data': 365,
             'returner': 'redis_return',
+            'disable_maintainers': [],
             'target': '*',
             'target_type': 'glob',
             }

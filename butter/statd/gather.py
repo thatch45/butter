@@ -46,7 +46,7 @@ class Gather(object):
                 mods.add(fn_[:fn_.rindex('.')])
 
         for mod in mods:
-            if self.opts['disable_returners'].count(mod):
+            if self.opts['disable_maintainers'].count(mod):
                 continue
             try:
                 tmodule = __import__('butter.statd.maint', globals(), locals(), [mod])
