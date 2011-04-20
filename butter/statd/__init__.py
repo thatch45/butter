@@ -26,7 +26,7 @@ class StatD(object):
         '''
         parser = optparse.OptionParser()
         
-        parser.add_option('-d'
+        parser.add_option('-d',
                 '--daemon',
                 dest='daemon',
                 default=False,
