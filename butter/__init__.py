@@ -4,6 +4,7 @@ Initialize command line stacks and direct them into the correct subsystem
 import sys
 import butter.kvm
 import butter.kvmd
+import butter.statd
 
 subsys = [
         'kvm',
