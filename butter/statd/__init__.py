@@ -10,6 +10,7 @@ import yaml
 # Import Butter modules
 import butter.utils
 import butter.statd.gather
+import butter.statd.config
 
 class StatD(object):
     '''
