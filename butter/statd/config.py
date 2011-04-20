@@ -14,7 +14,7 @@ def config(path='/etc/butter/statd'):
     Load up the configuration for butter kvm
     '''
     opts = {'interval': 30,
-            'commnads': ['status.status_all'],
+            'commands': {'status.status_all': []},
             'keep_data': 365,
             'returner': 'redis_return',
             'target': '*',
@@ -25,5 +25,11 @@ def config(path='/etc/butter/statd'):
             opts.update(yaml.load(open(path, 'r')))
         except:
             pass
+
+    opts['cmd'] = []
+    opts['arg'] = []
+    for cmd, arg in opts['commands']:
+        opts['cmd'].append(cmd)
+        opts['arg'].append(arg)
 
     return opts
