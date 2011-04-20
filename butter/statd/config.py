@@ -17,6 +17,8 @@ def config(path='/etc/butter/statd'):
             'commnads': ['status.status_all'],
             'keep_data': 365,
             'returner': 'redis_return',
+            'target': '*',
+            'target_type': 'glob',
             }
     if os.path.isfile(path):
         try:
