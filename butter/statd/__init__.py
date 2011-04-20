@@ -13,7 +13,6 @@ except:
 import yaml
 # Import Butter modules
 import butter.utils
-import butter.statd.http
 import butter.statd.gather
 
 class StatD(object):
@@ -40,11 +39,11 @@ class StatD(object):
 
         return butter.statd.config.config(options.config)
 
-    def load_procs(self):
+    def run(self):
         '''
         Create the multiprocessing/threading interfaces for butter statd and start them.
         '''
-        http_server = proc(target=butter.statd.http.run)
-        http_server.start()
-        gather = proc(target=butter.statd.gather.run)
-        gather.start()
+        #http_server = proc(target=butter.statd.http.run)
+        #http_server.start()
+        gather = butter.statd.gather.Gather(self.opts)
+        gather.loop()
