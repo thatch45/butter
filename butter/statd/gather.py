@@ -82,7 +82,7 @@ class Gather(object):
         Run the maintainer functions
         '''
         if self.maint.has_key(self.opts['returner']):
-            self.maint[self.opts['returner']].clean_old()
+            self.maint[self.opts['returner']].clean_old(self.opts['keep_data'])
 
     def loop(self):
         '''
