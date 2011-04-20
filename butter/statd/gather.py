@@ -24,7 +24,7 @@ class Gather(object):
     '''
     def __init__(self, opts):
         self.opts = opts
-        self.local = salt.client.LocalClient(self.opts['salt-master'])
+        self.local = salt.client.LocalClient(self.opts['master_config'])
         self.maint = self.__load_maintainers()
 
     def __load_maintainers(self):

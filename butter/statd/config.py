@@ -14,7 +14,7 @@ def config(path='/etc/butter/statd'):
     Load up the configuration for butter kvm
     '''
     opts = {'interval': 30,
-            'master-config': '/etc/salt/master',
+            'master_config': '/etc/salt/master',
             'commands': {'status.status_all': []},
             'keep_data': 365,
             'returner': 'redis_return',
