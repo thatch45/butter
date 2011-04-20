@@ -26,6 +26,13 @@ class StatD(object):
         '''
         parser = optparse.OptionParser()
         
+        parser.add_option('-d'
+                '--daemon',
+                dest='daemon',
+                default=False,
+                action='store_true',
+                help='Daemonoize the process.')
+
         parser.add_option('--config',
                 dest='config',
                 default='/etc/butter/statd',
@@ -34,7 +41,11 @@ class StatD(object):
 
         options, args = parser.parse_args()
 
-        return butter.statd.config.config(options.config)
+        opts = butter.statd.config.config(options.config)
+
+        opts['daemon'] = options.daemon
+
+        return opts
 
     def run(self):
         '''
@@ -43,4 +54,6 @@ class StatD(object):
         #http_server = proc(target=butter.statd.http.run)
         #http_server.start()
         gather = butter.statd.gather.Gather(self.opts)
+        if self.opts['daemon']:
+            butter.utils.daemonize()
         gather.loop()
