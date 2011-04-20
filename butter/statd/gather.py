@@ -4,6 +4,7 @@ The stats gathering sequence
 # Import python modules
 import os
 import distutils.sysconfig
+import time
 # Import salt modules
 import salt.client
 # Import butter modules
@@ -60,8 +61,6 @@ class Gather(object):
             if hasattr(module, 'clean_old'):
                 if callable(module.clean_old):
                     maint[mod] = module
-        self.opts['logger'].info('Loaded the following maintainers: '\
-                + str(maint))
 
         return maint
 
