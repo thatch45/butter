@@ -5,10 +5,6 @@ uses salt for statistics gathering and system monitoring.
 # Import Python modules
 import os
 import optparse
-try:
-    import multiprocessing.Process as proc
-except:
-    import threading.Thread as proc
 # Import third party modules
 import yaml
 # Import Butter modules
