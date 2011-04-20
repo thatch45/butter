@@ -28,7 +28,7 @@ def config(path='/etc/butter/statd'):
 
     opts['cmd'] = []
     opts['arg'] = []
-    for cmd, arg in opts['commands']:
+    for cmd, arg in opts['commands'].items():
         opts['cmd'].append(cmd)
         opts['arg'].append(arg)
 
