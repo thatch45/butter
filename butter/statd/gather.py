@@ -23,7 +23,7 @@ class Gather(object):
     minions and load the data into redis
     '''
     def __init__(self, opts):
-        salt.opts = opts
+        self.opts = opts
         self.local = salt.client.LocalClient(self.opts['salt-master'])
         self.maint = self.__load_maintainers()
 
