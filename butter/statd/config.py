@@ -15,7 +15,7 @@ def config(path='/etc/butter/statd'):
     '''
     opts = {'interval': 30,
             'master_config': '/etc/salt/master',
-            'commands': {'status.status_all': []},
+            'commands': {'status.all_status': []},
             'keep_data': 365,
             'returner': 'redis_return',
             'disable_maintainers': [],
