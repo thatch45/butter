@@ -1,5 +1,5 @@
 Spread it over your servers!!
 
-Butter is a unified cloud/cluser manager running on top of Salt.
+Butter is a unified cloud/cluster manager running on top of Salt.
 The idea is that salt is a comminication and execution system, and we keep salt as simple as possible.
 Then any complex operations for things like cloud computing, controlling puppet, and anything else we come up with!
