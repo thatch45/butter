@@ -20,7 +20,7 @@ class HVStat(object):
         '''
         Return a list, suitable for the salt client, of the hypervisors
         '''
-        data = self.local.cmd('*', 'virt.is_kvm_hyper', timeout=3)
+        data = self.local.cmd('*', 'virt.is_kvm_hyper', timeout=1)
         hypers = set()
         for hyper in data:
             if data[hyper] == True:
