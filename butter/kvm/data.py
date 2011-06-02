@@ -92,6 +92,18 @@ class HVStat(object):
                 return host
         return ''
 
+    def print_sum(self):
+        '''
+        Print a summary of hypervisors and the running vms
+        '''
+        out = ''
+        for host in sorted(self.resources):
+            out += utils.GREEN + 'Virtual Machines running on ' + host + ' -'\
+                +  utils.ENDC + '\n'
+            for name, info in sorted(self.resources[host]['vm_info'].items()):
+                out += '  ' + utils.CYAN + name + ' -' + utils.ENDC + '\n'
+        print out
+
     def print_system(self, system):
         '''
         Prints out the data to a console about a specific system

@@ -137,6 +137,14 @@ class KVM(object):
                 action='store_true',
                 help='Bypass any "are you sure" questions, use with caution!')
 
+        parser.add_option('-s',
+                '--sum',
+                '--summary',
+                dest='sum',
+                default=False,
+                action='store_true',
+                help='Print a summary message from a full query')
+
         parser.add_option('--clear-node',
                 dest='clear_node',
                 default='',
@@ -171,6 +179,7 @@ class KVM(object):
         cli['cpus'] = options.cpus
         cli['mem'] = options.mem
         cli['force'] = options.force
+        cli['sum'] = options.sum
         cli['clear_node'] = options.clear_node
         cli['config'] = options.config
 
@@ -183,10 +192,7 @@ class KVM(object):
         if len(args) > 1:
             dom = domain()
             host = args[-1]
-            if host.endswith(dom):
-                cli['fqdn'] = host
-            else:
-                cli['fqdn'] = host + '.' + dom
+            cli['fqdn'] = host
 
         # Figure out the pins
         if options.pin:
@@ -238,6 +244,8 @@ class KVM(object):
         data = butter.kvm.data.HVStat(self.opts)
         if self.opts['fqdn']:
             data.print_system(self.opts['fqdn'])
+        elif self.opts['sum']:
+            data.print_sum()
         else:
             data.print_query()
 
