@@ -27,8 +27,6 @@ class Gather(object):
     def __init__(self, opts):
         self.opts = opts
         self.local = salt.client.LocalClient(self.opts['master_config'])
-        self.maint = butter.loader.statd_maintainers(self.opts['maintainer_dirs'])
-        self.data = butter.loader.statd_data(self.opts['data_dirs'])
 
     def stat_cmd(self):
         '''
@@ -43,13 +41,6 @@ class Gather(object):
 
         self.local.cmd(*cmd)
 
-    def maintain(self):
-        '''
-        Run the maintainer functions
-        '''
-        if self.maint.has_key(self.opts['returner']):
-            self.maint[self.opts['returner']].clean_old(self.opts['keep_data'])
-
     def loop(self):
         '''
         Run the salt stat command loop
@@ -57,5 +48,25 @@ class Gather(object):
         while True:
             self.stat_cmd()
             time.sleep(self.opts['interval'])
-            self.maintain()
 
+class Maintain(object):
+    '''
+    Maintain a data source
+    '''
+    def __init__(self, opts):
+        self.opts = opts
+        self.maint = butter.loader.statd_maintainers(self.opts['maintainer_dirs'])
+
+    def maintain(self):
+        '''
+        Run the maintainer functions
+        '''
+        if self.maint.has_key(self.opts['returner']):
+            self.maint[self.opts['returner']].clean_old(self.opts['keep_data'])
+
+    def run():
+        '''
+        Start the maintainer
+        '''
+        self.maintain()
+        time.sleep(self.opts['interval'] * 10)
