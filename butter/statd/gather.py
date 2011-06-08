@@ -55,7 +55,7 @@ class Maintain(object):
     '''
     def __init__(self, opts):
         self.opts = opts
-        self.maint = butter.loader.statd_maintainers(self.opts['maintainer_dirs'])
+        self.maint = butter.loader.statd_maintainers(self.opts['data_dirs'])
 
     def maintain(self):
         '''
