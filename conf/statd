@@ -1,13 +1,51 @@
 ####     Global Stats Settings      #####
 #########################################
-# Number of seconds between calls
+# Number of seconds between data queries
 #interval: 10
+#
+#Te default alerter to use
 #alerter: email
+#
+# The salt target specefication
+#target: '*'
+# The salt target type, see salt documentation for available types
+#target_type: glob
+#
+# Butter needs to know where the salt master config file is to communicate
+# with the salt master
+#master_config: /etc/salt/master
+#
+# The number of days to keep stats data in the database, pass a negative value
+# to keep data indefinately
+#keep_data: 365
+#
+# Set the returner to use, this is also the interface used to query data.
+# Remember, salt minions need to be configured to communicate with the correct
+# mongo server(s)
+#returner: mongo_return
+#
+# Disable loading certian maintainers
+#disable_maintainers: []
+#
+# Disable loading certian data modules
+#disable_data: []
+#
+# Set additional maintainer directories, must be fully qualified paths
+#maintainer_dirs: []
+#
+# Set additional data directories, must be fully qualified paths
+#data_dirs: []
 
-# The mongo data for the server that is holding the stats
+# The mongo data if the returner is mongo_return 
 #mongo.host: salt
 #mongo.port: 27017
 #mongo.db: salt
+#
+# The Redis data if the returner is redis_return
+#redis.host: salt
+#redis.port: 27017
+#redis.db: salt
+#
 
 ####     Global Stats Settings      #####
 #########################################

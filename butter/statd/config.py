@@ -15,10 +15,13 @@ def config(path='/etc/butter/statd'):
     '''
     opts = {'interval': 30,
             'master_config': '/etc/salt/master',
-            'commands': {'status.all_status': []},
+            'statd_config': path,
             'keep_data': 365,
-            'returner': 'redis_return',
+            'returner': 'mongo_return',
             'disable_maintainers': [],
+            'disable_data': [],
+            'maintainer_dirs': [],
+            'data_dirs': [],
             'target': '*',
             'target_type': 'glob',
             }
