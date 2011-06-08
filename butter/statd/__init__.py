@@ -51,8 +51,6 @@ class StatD(object):
         '''
         Create the multiprocessing/threading interfaces for butter statd and start them.
         '''
-        #http_server = proc(target=butter.statd.http.run)
-        #http_server.start()
         gather = butter.statd.gather.Gather(self.opts)
         if self.opts['daemon']:
             butter.utils.daemonize()
