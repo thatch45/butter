@@ -24,3 +24,14 @@ def statd_data(dirs=[]):
         ] + dirs
     load = salt.loader.Loader(module_dirs, opts)
     return load.filter_func('data')
+
+def statd_alert(dirs=[]):
+    '''
+    Return the data backend modules
+    '''
+    module_dirs = [
+        os.path.join(distutils.sysconfig.get_python_lib(), 'butter/statd/alert'),
+        ] + dirs
+    load = salt.loader.Loader(module_dirs, opts)
+    return load.filter_func('alert')
+
