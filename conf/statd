@@ -1,0 +1,21 @@
+####     Global Stats Settings      #####
+#########################################
+# Number of seconds between calls
+#interval: 10
+#alerter: email
+
+# The mongo data for the server that is holding the stats
+#mongo.host: salt
+#mongo.port: 27017
+#mongo.db: salt
+
+####     Global Stats Settings      #####
+#########################################
+# The stats to gather coupled with alerts, the following entries are examples
+# only, no defaults for stat gathering are set.
+#
+#status.disk:
+#  - alerter: [email]
+#  - usage: [gt, 80]
+#status.net
+#test.ping
