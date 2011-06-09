@@ -5,7 +5,7 @@ The butter helper interface for the salt module loader
 # Import salt libs
 import salt.loader
 
-def statd_data(dirs=[]):
+def statd_data(dirs=[], opts):
     '''
     Return the data backend modules
     '''
@@ -13,7 +13,7 @@ def statd_data(dirs=[]):
         os.path.join(distutils.sysconfig.get_python_lib(), 'butter/statd/data'),
         ] + dirs
     load = salt.loader.Loader(module_dirs, opts)
-    return load.gen_functions()
+    return load.gen_functions(opts)
 
 def statd_alert(dirs=[]):
     '''
