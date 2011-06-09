@@ -18,11 +18,13 @@ def config(path='/etc/butter/statd'):
             'statd_config': path,
             'keep_data': 365,
             'returner': 'mongo_return',
+            'data_backend': 'mongo',
             'disable_data': [],
             'data_dirs': [],
             'target': '*',
             'target_type': 'glob',
             }
+
     if os.path.isfile(path):
         try:
             opts.update(yaml.load(open(path, 'r')))
