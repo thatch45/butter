@@ -13,7 +13,8 @@ def config(path='/etc/butter/statd'):
     '''
     Load up the configuration for butter kvm
     '''
-    opts = {'interval': 30,
+    opts = {'interval': 10,
+            'alert_window': 30,
             'master_config': '/etc/salt/master',
             'statd_config': path,
             'keep_data': 365,
