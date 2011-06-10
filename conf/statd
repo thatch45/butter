@@ -52,8 +52,9 @@
 # The stats to gather coupled with alerts, the following entries are examples
 # only, no defaults for stat gathering are set.
 #
-#status.disk:
-#  - alerter: [email]
-#  - usage: [gt, 80]
-#status.net
-#test.ping
+#stats:
+#  status.disk:
+#    - alerter: [email]
+#    - usage: [gt, 80]
+#  status.net
+#  test.ping

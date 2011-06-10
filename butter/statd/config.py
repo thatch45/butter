@@ -25,6 +25,7 @@ def config(path='/etc/butter/statd'):
             'data_dirs': [],
             'target': '.*',
             'target_type': 'pcre',
+            'stats': {},
             }
 
     if os.path.isfile(path):
