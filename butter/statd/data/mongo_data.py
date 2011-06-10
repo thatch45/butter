@@ -15,12 +15,31 @@ __opts__ = {
 
 def mine(frame, ids):
     '''
-    Read out the data for the passed ids in the mongo database
+    Read out the data for the passed ids in the mongo database, frame is the
+    number of returns to grab per host
+
+    returns the generic data for butter statd:
+    {'minion_id': {jid: data, {jid: data}, ...}
     '''
-    data = {}
+    # Set up the return
+    ret = {}
+    # Compile the regex
+    pat = re.compile(ids)
+    # Connect to mongo
     comm = pymongo.Connection(
             __opts__['mongo.host'],
             __opts__['mongo.port'],
             )
     db = conn[__opts__]['mongo.db']
     
+    # Itterate over collections (hosts)
+    for name in db.collection_names():
+        if pat.match(name):
+            # We have a host to add to ret
+            ret[name] = {}
+            for obj in db[name].find().sort('_id', -1).limit(frame):
+                for key, item in obj.items():
+                    if not key == '_id':
+                        ret[name][key] = item
+    return ret
+
