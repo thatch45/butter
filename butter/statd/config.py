@@ -15,6 +15,7 @@ def config(path='/etc/butter/statd'):
     '''
     opts = {'interval': 10,
             'alert_window': 30,
+            'sampling_frame': 10,
             'master_config': '/etc/salt/master',
             'statd_config': path,
             'keep_data': 365,
@@ -22,8 +23,8 @@ def config(path='/etc/butter/statd'):
             'data_backend': 'mongo',
             'disable_data': [],
             'data_dirs': [],
-            'target': '*',
-            'target_type': 'glob',
+            'target': '.*',
+            'target_type': 'pcre',
             }
 
     if os.path.isfile(path):
