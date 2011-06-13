@@ -17,7 +17,7 @@ def statd_data(dirs=[], opts):
 
 def statd_alert(dirs=[]):
     '''
-    Return the data backend modules
+    Return the alerter modules
     '''
     module_dirs = [
         os.path.join(distutils.sysconfig.get_python_lib(), 'butter/statd/alert'),
