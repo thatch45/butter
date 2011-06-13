@@ -15,7 +15,7 @@ def statd_data(dirs=[], opts):
     load = salt.loader.Loader(module_dirs, opts)
     return load.gen_functions(opts)
 
-def statd_alert(dirs=[]):
+def statd_alert(dirs=[], opts):
     '''
     Return the alerter modules
     '''

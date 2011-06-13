@@ -14,8 +14,10 @@ class Monitor(object):
     '''
     def __init__(self, opts):
         self.opts = opts
-        self.data = butter.loader.statd_data(self.opts['data_dirs'])
-        self.alerters = butter.loader.statd_alerts(self.opts['alert_dirs'])
+        self.data = butter.loader.statd_data(self.opts['data_dirs'], opts)
+        self.alerters = butter.loader.statd_alerts(
+                self.opts['alert_dirs'], self.opts
+                )
         self.mine = self.__get_miner()
 
     def __get_miner(self):
