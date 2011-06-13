@@ -94,7 +94,8 @@ class Monitor(object):
         '''
         for name in alerts:
             for tag, data in alerts['name'].items():
-                self.alerters[data['alerter']](name, tag, data)
+                for alerter in data['alerter']:
+                    self.alerters[alerter](name, tag, data)
 
     def run(self):
         '''

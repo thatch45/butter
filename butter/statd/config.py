@@ -15,6 +15,7 @@ def config(path='/etc/butter/statd'):
     '''
     opts = {'interval': 10,
             'alert_window': 30,
+            'alerter': ['email'],
             'sampling_frame': 10,
             'master_config': '/etc/salt/master',
             'statd_config': path,
