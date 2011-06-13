@@ -54,4 +54,7 @@ class StatD(object):
         gather = butter.statd.gather.Gather(self.opts)
         if self.opts['daemon']:
             butter.utils.daemonize()
+        if self.opts['stats']:
+            monit = butter.statd.monitor.Monitor(self.opts)
+            multiprocessing.Process(target=monit.run).start()
         gather.run()
