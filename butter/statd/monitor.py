@@ -2,7 +2,8 @@
 Reads the data returned from the gather system and executes any alerts
 '''
 # Import Python Libs
-import datetime
+import time
+#import datetime
 import sys
 # Import butter libs
 import butter.loader
@@ -13,7 +14,8 @@ class Monitor(object):
     '''
     def __init__(self, opts):
         self.opts = opts
-        self.data = buter.loader.statd_data(self.opts['data_dirs'])
+        self.data = butter.loader.statd_data(self.opts['data_dirs'])
+        self.alerters = butter.loader.statd_alerts(self.opts['alert_dirs'])
         self.mine = self.__get_miner()
 
     def __get_miner(self):
@@ -34,3 +36,72 @@ class Monitor(object):
         Return the data set as it is configured
         '''
         return self.mine(self.opts['sampling_frame'], self.opts['target'])
+
+    def gen_alerts(self, fresh):
+        '''
+        Itterate over fresh data and call alert functions if they are flagged.
+        '''
+        # Alerts structure:
+        # {<minion id>:
+        #   {<call.elem>: 
+        #       {alerter: <alerter list>,
+        #        type: over/under,
+        #        val: server value,
+        #        thresh: config value,
+        #       },...
+        #   },...
+        # }
+        #now = datetime.datetime.strftime(
+        #   datetime.datetime.now(),
+        #   '%Y%m%d%H%M%S'
+        #   )
+        alerts = {}
+        for name, top in fresh.items():
+            alerts[name] = {}
+            # Iterate over the hosts, check latest return 
+            latest = sorted(top)[-1]
+            # Itterate over the calls made by salt
+            for call, data in top[latest].items():
+                if self.opts['stats'].has_key(call):
+                    for elem, val in data.items():
+                        tag = '{0}.{1}'.format(call, elem)
+                        alerts[name][tag] = {}
+                        alerts[name][tag]['alerter'] = self.opts['alerter']
+                        # Determine what alerters to use
+                        if not self.opts['stats'][call].has_key(elem):
+                            continue
+                        conf = self.opts['stats'][call][elem]
+                        if conf.has_key('alerter'):
+                            # This element has a custom alerter
+                            alerts[name][tag]['alerter'] = conf['alerter']
+                        if conf.has_key('over'):
+                            if conf['over'] < val:
+                                # Add an alert for the "over" flag
+                                alerts[name][tag]['type'] = 'over'
+                                alerts[name][tag]['val'] = val
+                                alerts[name][tag]['thresh'] = conf['over']
+                        if conf.has_key('under'):
+                            if conf['under'] > val:
+                                # Add an alert for the "under" flag
+                                alerts[name][tag]['type'] = 'under'
+                                alerts[name][tag]['val'] = val
+                                alerts[name][tag]['thresh'] = conf['under']
+        return alerts
+
+    def run_alerts(self, alerts):
+        '''
+        Pass in the alerts structure and execute the derived alerts
+        '''
+        for name in alerts:
+            for tag, data in alerts['name'].items():
+                self.alerters[data['alerter']](name, tag, data)
+
+    def run(self):
+        '''
+        Run a monitor daemon
+        '''
+        while True:
+            fresh = self.fresh_data()
+            alerts = self.gen_alerts(fresh)
+            self.run_alerts(alerts)
+            time.sleep(self.opts['interval'] + 2)

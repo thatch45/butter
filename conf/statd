@@ -54,7 +54,9 @@
 #
 #stats:
 #  status.disk:
-#    - alerter: [email]
-#    - usage: [gt, 80]
+#    alerter: [email]
+#    usage:
+#      over: 80
+#      under: 10
 #  status.net
 #  test.ping
