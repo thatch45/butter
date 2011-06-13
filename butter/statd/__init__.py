@@ -54,4 +54,4 @@ class StatD(object):
         gather = butter.statd.gather.Gather(self.opts)
         if self.opts['daemon']:
             butter.utils.daemonize()
-        gather.loop()
+        gather.run()

@@ -41,7 +41,7 @@ class Gather(object):
 
         self.local.cmd(*cmd)
 
-    def loop(self):
+    def run(self):
         '''
         Run the salt stat command loop
         '''
