@@ -6,7 +6,7 @@ The setup script for butter
 from distutils.core import setup
 
 setup(name='butter',
-      version='0.2.0',
+      version='0.4.0',
       description='High level execution manager',
       author='Thomas S Hatch',
       author_email='thatch45@gmail.com',
@@ -16,7 +16,8 @@ setup(name='butter',
                 'butter.kvm',
                 'butter.kvmd',
                 'butter.statd',
-                'butter.statd.maint'
+                'butter.statd.data',
+                'butter.statd.alert',
                 ],
       scripts=[
                'scripts/butter',
