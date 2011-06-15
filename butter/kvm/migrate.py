@@ -40,13 +40,19 @@ class Migrate(object):
         if frm['vm_info'].has_key(name):
             # There is a vm on from by the name of the migrated vm
             return False
-        if frm['vm_info']['local_images'].count(name):
+        if frm['local_images'].count(name):
             # The image is here but no vm with it
             cmd = 'rm -rf ' + os.path.join(self.opts['local_path'], name)
-            print cmd
-            #self.local.cmd(m_data['from'],
-            #        'cmd.run',
-            #        [cmd])
+            self.local.cmd(m_data['from'],
+                    'cmd.run',
+                    [cmd])
+            l_images = self.local.cmd(m_data['from'],
+                    'butterkvm.local_images',
+                    [self.opts['local_path']])
+            if l_images[m_data['from']].count(self.opts['fqdn']):
+                return False
+            else:
+                return True
         return False
 
     def run_logic(self):
