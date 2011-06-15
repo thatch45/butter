@@ -9,7 +9,6 @@ import time
 import salt.client
 # Import butter modules
 import butter.loader
-import butter.statd.maint
 
 # Import cython 
 cython_enable = False
