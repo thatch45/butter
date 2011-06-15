@@ -186,6 +186,7 @@ class Create(object):
             return ret
         elif self.opts['hyper'] and not resources.has_key(self.opts['hyper']):
             # hyper specified on the command line does not exist
+            print 'The specified hypervisor is not present, aborting'
             ret['hyper'] = self.opts['hyper']
             ret['state'] = True
             return ret
