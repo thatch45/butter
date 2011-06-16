@@ -26,7 +26,7 @@ def mine(frame, ids):
     # Compile the regex
     pat = re.compile(ids)
     # Connect to mongo
-    comm = pymongo.Connection(
+    conn = pymongo.Connection(
             __opts__['mongo.host'],
             __opts__['mongo.port'],
             )
