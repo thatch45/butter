@@ -35,10 +35,4 @@ def config(path='/etc/butter/statd'):
         except:
             pass
 
-    opts['cmd'] = []
-    opts['arg'] = []
-    for cmd, arg in opts['commands'].items():
-        opts['cmd'].append(cmd)
-        opts['arg'].append(arg)
-
     return opts
