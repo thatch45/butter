@@ -27,7 +27,7 @@ class Gather(object):
         self.opts = opts
         self.local = salt.client.LocalClient(self.opts['master_config'])
 
-    def construct_arg(self):
+    def construct_cmd(self):
         '''
         Return the command and argument constructs derived from the
         configuration, if no configuration is set, butter statd will exit
@@ -39,7 +39,7 @@ class Gather(object):
             sys.exit(2)
         cmds = []
         args = []
-        for call, data in self.opts['status'].items():
+        for call, data in self.opts['stats'].items():
             cmds.append(call)
             if data.has_key('arg'):
                 args.append(data['args'])
@@ -53,8 +53,8 @@ class Gather(object):
         '''
         cmds, args = self.construct_cmd()
         cmd = [self.opts['target'],
-               cmd,
-               arg,
+               cmds,
+               args,
                0,
                self.opts['target_type'],
                self.opts['returner']]

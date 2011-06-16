@@ -30,7 +30,7 @@ def mine(frame, ids):
             __opts__['mongo.host'],
             __opts__['mongo.port'],
             )
-    db = conn[__opts__]['mongo.db']
+    db = conn[__opts__['mongo.db']]
     
     # Itterate over collections (hosts)
     for name in db.collection_names():
