@@ -26,6 +26,7 @@ setup(name='butter',
                     [
                      'conf/kvm',
                      'conf/kvmd',
+                     'conf/statd',
                     ]),
                   ('/etc/rc.d',
                     [
