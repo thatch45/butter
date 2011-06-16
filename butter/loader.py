@@ -16,7 +16,7 @@ def statd_data(opts):
         os.path.join(distutils.sysconfig.get_python_lib(), 'butter/statd/data'),
         ] + opts['data_dirs']
     load = salt.loader.Loader(module_dirs, opts)
-    return load.gen_functions(opts)
+    return load.gen_functions()
 
 def statd_alert(opts):
     '''
