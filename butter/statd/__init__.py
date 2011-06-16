@@ -11,6 +11,7 @@ import yaml
 import butter.utils
 import butter.statd.gather
 import butter.statd.config
+import butter.statd.monitor
 
 class StatD(object):
     '''
