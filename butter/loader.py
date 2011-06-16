@@ -1,6 +1,9 @@
 '''
 The butter helper interface for the salt module loader
 '''
+# Import python libs
+import os
+import distutils.sysconfig
 
 # Import salt libs
 import salt.loader
