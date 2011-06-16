@@ -24,6 +24,7 @@ def config(path='/etc/butter/statd'):
             'data_backend': 'mongo',
             'disable_data': [],
             'data_dirs': [],
+            'alert_dirs': [],
             'target': '.*',
             'target_type': 'pcre',
             'stats': {},
