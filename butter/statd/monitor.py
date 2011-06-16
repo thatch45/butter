@@ -15,7 +15,7 @@ class Monitor(object):
     def __init__(self, opts):
         self.opts = opts
         self.data = butter.loader.statd_data(self.opts)
-        self.alerters = butter.loader.statd_alerts(self.opts)
+        self.alerters = butter.loader.statd_alert(self.opts)
         self.mine = self.__get_miner()
 
     def __get_miner(self):
