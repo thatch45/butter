@@ -3,7 +3,7 @@ Reads the data returned from the gather system and executes any alerts
 '''
 # Import Python Libs
 import time
-#import datetime
+import datetime
 import sys
 # Import butter libs
 import butter.loader
@@ -51,15 +51,20 @@ class Monitor(object):
         #       },...
         #   },...
         # }
-        #now = datetime.datetime.strftime(
-        #   datetime.datetime.now(),
-        #   '%Y%m%d%H%M%S'
-        #   )
+        now = datetime.datetime.strftime(
+           datetime.datetime.now(),
+           '%Y%m%d%H%M%S%f'
+           )
         alerts = {}
         for name, top in fresh.items():
             alerts[name] = {}
-            # Iterate over the hosts, check latest return 
-            latest = sorted(top)[-1]
+            # Iterate over the hosts, check latest return
+            latest = None
+            for jid in sorted(top, reverse=True):
+                if len(jid) == len(now):
+                    latest = jid
+            if not latest:
+                return alerts
             # Itterate over the calls made by salt
             for call, data in top[latest].items():
                 if self.opts['stats'].has_key(call):
@@ -93,7 +98,7 @@ class Monitor(object):
         Pass in the alerts structure and execute the derived alerts
         '''
         for name in alerts:
-            for tag, data in alerts['name'].items():
+            for tag, data in alerts[name].items():
                 for alerter in data['alerter']:
                     self.alerters[alerter](name, tag, data)
 
