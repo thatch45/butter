@@ -3,6 +3,7 @@ The stats gathering sequence
 '''
 # Import python modules
 import os
+import sys
 import distutils.sysconfig
 import time
 # Import salt modules
