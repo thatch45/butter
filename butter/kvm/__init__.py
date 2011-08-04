@@ -3,9 +3,9 @@ Initialize interactions with the butter kvm subsytem
 '''
 # Import Python libs
 import optparse
-import sys
-import subprocess
 import os
+import subprocess
+import sys
 import time
 
 # Import third party libs
@@ -14,8 +14,8 @@ import yaml
 # Import butter libs
 import butter.kvm.config
 import butter.kvm.create
-import butter.kvm.overlay
 import butter.kvm.migrate
+import butter.kvm.overlay
 
 def domain():
     '''
@@ -40,7 +40,8 @@ class KVM(object):
         '''
         Parse the butter command line options
         '''
-        parser = optparse.OptionParser()
+        prog = " ".join([os.path.basename(sys.argv[0]), sys.argv[1]])
+        parser = optparse.OptionParser(prog=prog)
 
         parser.add_option('-C',
                 '--create',

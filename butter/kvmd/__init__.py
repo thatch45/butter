@@ -3,9 +3,9 @@ Initialize interactions with the butter kvm subsytem
 '''
 # Import Python libs
 import optparse
-import sys
-import subprocess
 import os
+import subprocess
+import sys
 import time
 
 # Import third party libs
@@ -26,7 +26,8 @@ class KVMD(object):
         '''
         Parse the command line options passed to the butter kvm daemon
         '''
-        parser = optparse.OptionParser()
+        prog = " ".join([os.path.basename(sys.argv[0]), sys.argv[1]])
+        parser = optparse.OptionParser(prog=prog)
         parser.add_option('-f',
                 '--foreground',
                 default=False,

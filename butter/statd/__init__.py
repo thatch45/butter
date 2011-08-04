@@ -3,15 +3,18 @@ The statd subsystem is used to create the stat daemon, this is a system
 that uses salt for statistics system monitoring.
 '''
 # Import Python modules
-import os
-import optparse
 import multiprocessing
+import optparse
+import os
+import sys
+
 # Import third party modules
 import yaml
+
 # Import Butter modules
-import butter.utils
 import butter.statd.config
 import butter.statd.monitor
+import butter.utils
 
 class StatD(object):
     '''
@@ -25,7 +28,8 @@ class StatD(object):
         '''
         Parse the command line options and load the configuration
         '''
-        parser = optparse.OptionParser()
+        prog = " ".join([os.path.basename(sys.argv[0]), sys.argv[1]])
+        parser = optparse.OptionParser(prog=prog)
         
         parser.add_option('-d',
                 '--daemon',
