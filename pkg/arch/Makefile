@@ -3,10 +3,10 @@
 
 local:
 	-rm -rf ../../build
+	-rm butter-local*.tar.xz
 	makepkg -f -p PKGBUILD-local --asroot
-	rm -rf pkg
+	-rm -rf pkg ../../build
 
 install: local
 	-yes | pacman -R butter-local
 	yes | pacman -U butter-local-*
-
