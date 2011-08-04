@@ -9,7 +9,7 @@ url="https://github.com/thatch45/butter"
 license=("APACHE")
 depends=('python2'
          'salt')
-backup=('etc/butter/kvm')
+backup=('etc/butter/kvm' 'etc/butter/kvmd' 'etc/butter/statd')
 makedepends=()
 optdepends=()
 options=()

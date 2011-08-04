@@ -11,7 +11,7 @@ depends=('python2'
          'salt-git')
 makedepends=('git')
 provides=()
-backup=('etc/butter/kvm')
+backup=('etc/butter/kvm' 'etc/butter/kvmd' 'etc/butter/statd')
 
 _gitroot="git://github.com/thatch45/butter.git"
 _gitname="butter"
