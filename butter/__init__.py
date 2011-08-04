@@ -37,6 +37,8 @@ def run():
 
     cls = _SUBSYSTEMS.get(sys.argv[1])
     if cls is None:
-        usage(sys.stderr)
+        print >> sys.stderr, '''invalid subsystem '{}'
+use one of the following: {}'''.format(sys.argv[1],
+                                       ", ".join(sorted(_SUBSYSTEMS)))
         sys.exit(1)
     cls().run()
