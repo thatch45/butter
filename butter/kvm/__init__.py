@@ -2,6 +2,7 @@
 Initialize interactions with the butter kvm subsytem
 '''
 # Import Python libs
+import logging
 import optparse
 import os
 import subprocess
@@ -16,6 +17,9 @@ import butter.kvm.config
 import butter.kvm.create
 import butter.kvm.migrate
 import butter.kvm.overlay
+import butter.log
+
+log = logging.getLogger(__name__)
 
 def domain():
     '''
@@ -26,6 +30,18 @@ def domain():
             shell=True,
             stdout=subprocess.PIPE).communicate()[0].strip()
 
+def verify_env(dirs):
+    '''
+    Verify that the named directories are in place and that the environment
+    can shake the salt
+    '''
+    for dir_ in dirs:
+        if not os.path.isdir(dir_):
+            try:
+                os.makedirs(dir_)
+            except OSError, e:
+                print 'Failed to create directory path "%s" - %s' % (dir_, e)
+
 class KVM(object):
     '''
     The KVM class is used to wrap the functionality of all butter kvm calls
@@ -35,6 +51,9 @@ class KVM(object):
         Set up a KVM object
         '''
         self.opts = self.__parse()
+
+        for name, level in self.opts['log_granular_levels'].iteritems():
+            butter.log.set_logger_level(name, level)
 
     def __parse(self):
         '''
@@ -165,9 +184,20 @@ class KVM(object):
                 help='Pass in an alternative path for the butter kvm'\
                     + ' configuration file; default: /etc/butter/kvm')
 
+        parser.add_option('-l',
+                '--log-level',
+                dest='log_level',
+                default='warning',
+                choices=butter.log.LOG_LEVELS.keys(),
+                help='Console log level. One of %s. For the logfile settings '
+                     'see the config file. Default: \'%%default\'.' %
+                     ', '.join([repr(l) for l in butter.log.LOG_LEVELS.keys()]))
+
         options, args = parser.parse_args()
 
         cli = {}
+
+        butter.log.setup_console_logger(options.log_level)
 
         cli['create'] = options.create
         cli['destroy'] = options.destroy
@@ -254,6 +284,9 @@ class KVM(object):
         '''
         Execute the logic required to act on the passed state data
         '''
+        verify_env([os.path.dirname(self.opts['log_file'])])
+        butter.log.setup_logfile_logger(self.opts['log_file'], self.opts['log_level'])
+
         # Each sequence should be a function in the class so that the
         # capabilities can be manipulated in a more api centric way
         if self.opts['create']:

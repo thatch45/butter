@@ -2,6 +2,7 @@
 Initialize interactions with the butter kvm subsytem
 '''
 # Import Python libs
+import logging
 import optparse
 import os
 import subprocess
@@ -13,6 +14,9 @@ import yaml
 
 # Import butter libs
 import butter.kvmd.daemon
+import butter.log
+
+log = logging.getLogger(__name__)
 
 class KVMD(object):
     '''
@@ -41,7 +45,18 @@ class KVMD(object):
                 dest='config',
                 help='Pass in an alternative configuration file')
 
+        parser.add_option('-l',
+                '--log-level',
+                dest='log_level',
+                default='warning',
+                choices=butter.log.LOG_LEVELS.keys(),
+                help='Console log level. One of %s. For the logfile settings '
+                     'see the config file. Default: \'%%default\'.' %
+                     ', '.join([repr(l) for l in butter.log.LOG_LEVELS.keys()]))
+
         options, args = parser.parse_args()
+
+        butter.log.setup_console_logger(options.log_level)
 
         return {'foreground': options.foreground,
                 'config': options.config}

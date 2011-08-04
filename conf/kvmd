@@ -1,3 +1,27 @@
+##### KVMD configuration settings    #####
+##########################################
+# The root directory prepended to these options: log_file
+#root_dir: /
+
+#####         Logging settings       #####
+##########################################
+# The location of the master log file
+#log_file: /var/log/butter/kvmd
+# The level of messages to send to the log file.
+# One of 'info', 'quiet', 'critical', 'error', 'debug', 'warning'.
+# Default: 'warning'
+#log_level: warning
+#
+# Logger levels can be used to tweak specific loggers logging levels.
+# Imagine you want to have the butter library at the 'warning' level,
+# but you still wish to have 'butter.modules' at the 'debug' level:
+#   log_granular_levels: {
+#     'butter': 'warning',
+#     'butter.modules': 'debug'
+#   }
+#
+#log_granular_levels: {}
+
 # Configuration for the kvm daemon
 #images: /srv/vm/images
 #pool_size: 5
