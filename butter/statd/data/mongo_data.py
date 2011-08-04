@@ -11,12 +11,14 @@ __opts__ = {
             'mongo.host': 'salt',
             'mongo.port': 27017,
             'mongo.db': 'salt',
+            'mongo.user': '',
+            'mongo.password': '',
            }
 
 def mine(frame, ids):
     '''
-    Read out the data for the passed ids in the mongo database, frame is the
-    number of returns to grab per host
+    Read out the data for the passed ids in the mongo database, frame
+    is the number of returns to grab per host
 
     returns the generic data for butter statd:
     {'minion_id': {jid: data, {jid: data}, ...}

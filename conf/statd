@@ -3,10 +3,7 @@
 # Number of seconds between data queries
 #interval: 10
 #
-#Te default alerter to use
-#alerter: [email]
-#
-# The salt target specefication
+# The salt target specification
 #target: '*'
 # The salt target type, see salt documentation for available types
 #target_type: glob
@@ -15,13 +12,13 @@
 # with the salt master
 #master_config: /etc/salt/master
 #
-# The number of days to keep stats data in the database, pass a negative value
-# to keep data indefinately
+# The number of days to keep stats data in the database, pass a negative
+# value to keep data indefinately
 #keep_data: 365
 #
 # Set the returner to use, this is also the interface used to query data.
-# Remember, salt minions need to be configured to communicate with the correct
-# mongo server(s)
+# Remember, salt minions need to be configured to communicate with the
+# correct mongo server(s)
 #returner: mongo_return
 #
 # Disable loading certian maintainers
@@ -40,6 +37,8 @@
 #mongo.host: salt
 #mongo.port: 27017
 #mongo.db: salt
+#mongo.user:
+#mongo.password:
 #
 # The Redis data if the returner is redis_return
 #redis.host: salt
@@ -47,16 +46,11 @@
 #redis.db: salt
 #
 
-####     Global Stats Settings      #####
+####     Stats Alert Settings       #####
 #########################################
-# The stats to gather coupled with alerts, the following entries are examples
-# only, no defaults for stat gathering are set.
+
+# XXX ADD EXAMPLES HERE
+
+#Te default alerter to use
+#alerter: [email]
 #
-#stats:
-#  status.disk:
-#    alerter: [email]
-#    usage:
-#      over: 80
-#      under: 10
-#  status.net
-#  test.ping

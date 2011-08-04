@@ -25,8 +25,8 @@ class Monitor(object):
         name = '{0[data_backend]}_data.mine'.format(self.opts)
         if self.data.has_key(name):
             return self.data[name]
-        err = 'Data backend for {0[data_backend]} was not found, check the'\
-            + ' "data_backend" configuration value.'
+        err = 'Data backend for {0[data_backend]} was not found, ' + \
+              'check the "data_backend" configuration value.'
         err.format(self.opts)
         sys.stderr.write(err)
         sys.exit(2)
@@ -39,7 +39,8 @@ class Monitor(object):
 
     def gen_alerts(self, fresh):
         '''
-        Itterate over fresh data and call alert functions if they are flagged.
+        Itterate over fresh data and call alert functions if they are
+        flagged.
         '''
         # Alerts structure:
         # {<minion id>:

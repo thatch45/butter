@@ -2,6 +2,7 @@
 # prior to committing changes to git.
 
 local:
+	-rm -rf ../../build
 	makepkg -f -p PKGBUILD-local --asroot
 	rm -rf pkg
 
