@@ -6,57 +6,37 @@ import butter.kvm
 import butter.kvmd
 import butter.statd
 
-subsys = [
-        'kvm',
-        'kvmd',
-        'statd',
-        ]
+_SUBSYSTEMS = {
+                'kvm':   butter.kvm.KVM,
+                'kvmd':  butter.kvmd.KVMD,
+                'statd': butter.statd.StatD,
+             }
 
-def __run_kvm():
+def usage(stream):
     '''
-    Parse the butter command line for kvm commands and run the logic
+    Display the usage message.
     '''
-    kvm = butter.kvm.KVM()
-    kvm.run()
+    print >> stream, '''
+Welcome to the butter toolkit.  Butter is the objective execution and
+management layer built on top of the Salt communication framework.
 
-def __run_kvmd():
-    '''
-    Parse the butter command line for kvmd commands and execute the kvm daemon
-    '''
-    kvmd = butter.kvmd.KVMD()
-    kvmd.run()
+To access the help system, run 'butter <subsystem> --help'.
+For example:
+    # butter kvm --help
 
-def __run_statd():
-    '''
-    Parse the statd command line and kick off the butter statd daemon
-    '''
-    statd = butter.statd.StatD()
-    statd.run()
+The available subsystems are: {}
+'''.format(", ".join(sorted(_SUBSYSTEMS)))
 
 def run():
     '''
-    Execute the body of the butter command
+    Execute the the butter command.
     '''
-    dia = '''
-Welcome to the butter toolkit, butter is the objective execution and management
-layer built on top of the Salt communication framework.
-
-To access the butter help system execute a butter subsytem's --help call:
-    # butter kvm --help
-
-The available subsystems are:'''
     if len(sys.argv) == 1:
+        usage(sys.stdout)
+        sys.exit(0)
 
-        print dia
-        print subsys
-        sys.exit(42)
-    elif not subsys.count(sys.argv[1]):
-        print dia
-        print subsys
-        sys.exit(42)
-
-    {
-    'kvm': __run_kvm,
-    'kvmd': __run_kvmd,
-    'statd': __run_statd,
-    }[sys.argv[1]]()
+    cls = _SUBSYSTEMS.get(sys.argv[1])
+    if cls is None:
+        usage(sys.stderr)
+        sys.exit(1)
+    cls().run()
