@@ -2,7 +2,6 @@
 Initialize interactions with the butter kvm subsytem
 '''
 # Import Python libs
-import logging
 import optparse
 import os
 import subprocess
@@ -19,7 +18,7 @@ import butter.kvm.migrate
 import butter.kvm.overlay
 import butter.log
 
-log = logging.getLogger(__name__)
+log = butter.log.getLogger(__name__)
 
 def domain():
     '''

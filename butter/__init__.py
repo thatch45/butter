@@ -1,9 +1,10 @@
 '''
 Initialize command line stacks and direct them into the correct subsystem
 '''
+import butter.log
+
 import butter.kvm
 import butter.kvmd
-import butter.log
 import butter.statd
 import sys
 

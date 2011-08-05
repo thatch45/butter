@@ -3,14 +3,14 @@ Reads the data returned from the gather system and executes any alerts
 '''
 # Import Python Libs
 import datetime
-import logging
 import sys
 import time
 
 # Import butter libs
 import butter.loader
+import butter.log
 
-log = logging.getLogger(__name__)
+log = butter.log.getLogger(__name__)
 
 class Monitor(object):
     '''

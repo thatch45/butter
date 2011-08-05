@@ -34,6 +34,10 @@ class Logging(LoggingLoggerClass):
     def trace(self, msg, *args, **kwargs):
         return LoggingLoggerClass.log(self, 5, msg, *args, **kwargs)
 
+def getLogger(name):
+    init()
+    return logging.getLogger(name)
+
 def init():
     '''
     Replace the default system logger with a version that includes trace()

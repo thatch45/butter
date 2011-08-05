@@ -3,7 +3,6 @@ The statd subsystem is used to create the stat daemon, this is a system
 that uses salt for statistics system monitoring.
 '''
 # Import Python modules
-import logging
 import optparse
 import os
 import sys
@@ -17,7 +16,7 @@ import butter.statd.config
 import butter.statd.monitor
 import butter.utils
 
-log = logging.getLogger(__name__)
+log = butter.log.getLogger(__name__)
 
 def verify_env(dirs):
     '''

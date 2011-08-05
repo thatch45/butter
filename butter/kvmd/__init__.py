@@ -2,7 +2,6 @@
 Initialize interactions with the butter kvm subsytem
 '''
 # Import Python libs
-import logging
 import optparse
 import os
 import subprocess
@@ -16,7 +15,7 @@ import yaml
 import butter.kvmd.daemon
 import butter.log
 
-log = logging.getLogger(__name__)
+log = butter.log.getLogger(__name__)
 
 class KVMD(object):
     '''
