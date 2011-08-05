@@ -4,7 +4,6 @@ that uses salt for statistics system monitoring.
 '''
 # Import Python modules
 import logging
-import multiprocessing
 import optparse
 import os
 import sys
@@ -13,6 +12,7 @@ import sys
 import yaml
 
 # Import Butter modules
+import butter.log
 import butter.statd.config
 import butter.statd.monitor
 import butter.utils
@@ -83,14 +83,12 @@ class StatD(object):
 
     def run(self):
         '''
-        Create the multiprocessing/threading interfaces for butter statd
-        and start them.
+        Start butter statd.
         '''
         verify_env([os.path.dirname(self.opts['log_file'])])
         butter.log.setup_logfile_logger(self.opts['log_file'], self.opts['log_level'])
 
         if self.opts['daemon']:
             butter.utils.daemonize()
-        if self.opts['stats']:
-            monit = butter.statd.monitor.Monitor(self.opts)
-            monit.run()
+        monitor = butter.statd.monitor.Monitor(self.opts)
+        monitor.run()

@@ -1,10 +1,11 @@
 '''
 Initialize command line stacks and direct them into the correct subsystem
 '''
-import sys
 import butter.kvm
 import butter.kvmd
+import butter.log
 import butter.statd
+import sys
 
 _SUBSYSTEMS = {
                 'kvm':   butter.kvm.KVM,
@@ -41,4 +42,5 @@ def run():
 use one of the following: {}'''.format(sys.argv[1],
                                        ", ".join(sorted(_SUBSYSTEMS)))
         sys.exit(1)
+    butter.log.init()
     cls().run()

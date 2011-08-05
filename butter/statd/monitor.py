@@ -2,11 +2,15 @@
 Reads the data returned from the gather system and executes any alerts
 '''
 # Import Python Libs
-import time
 import datetime
+import logging
 import sys
+import time
+
 # Import butter libs
 import butter.loader
+
+log = logging.getLogger(__name__)
 
 class Monitor(object):
     '''
@@ -107,8 +111,10 @@ class Monitor(object):
         '''
         Run a monitor daemon
         '''
+        log.debug('start statd')
         while True:
             fresh = self.fresh_data()
             alerts = self.gen_alerts(fresh)
+            log.trace('found %s alerts', len(alerts))
             self.run_alerts(alerts)
             time.sleep(self.opts['interval'] + 2)
