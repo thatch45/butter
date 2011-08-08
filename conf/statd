@@ -63,6 +63,7 @@
 #mongo.db: salt
 #mongo.user:
 #mongo.password:
+#mongo.last_id.filename: /var/cache/butter/statd/mongo.last_id
 #
 # The Redis data if the returner is redis_return
 #redis.host: salt
