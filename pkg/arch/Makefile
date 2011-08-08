@@ -2,9 +2,13 @@
 # prior to committing changes to git.
 
 local:
-	-rm -rf ../../build
-	-rm butter-local*.tar.xz
-	makepkg -f -p PKGBUILD-local --asroot
+	-rm -rf ../../build pkg butter-*.pkg.tar.xz
+	if [ "$$(id -u)" -eq 0 ]; \
+	then \
+	    makepkg -f -p PKGBUILD-local --asroot; \
+	else \
+	    makepkg -f -p PKGBUILD-local; \
+	fi
 	-rm -rf pkg ../../build
 
 install: local
