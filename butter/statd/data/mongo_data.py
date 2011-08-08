@@ -33,6 +33,10 @@ def mine(frame, ids):
             __opts__['mongo.port'],
             )
     db = conn[__opts__['mongo.db']]
+    user = __opts__['mongo.user']
+    password = __opts__['mongo.password']
+    if user and password:
+        db.authenticate(user, password)
     
     # Itterate over collections (hosts)
     for name in db.collection_names():
@@ -44,4 +48,3 @@ def mine(frame, ids):
                     if not key == '_id':
                         ret[name][key] = item
     return ret
-
