@@ -40,7 +40,7 @@ def mine(frame, ids):
     
     # Itterate over collections (hosts)
     for name in db.collection_names():
-        if pat.match(name):
+        if pat.match(name) and not name.startswith('system.'):
             # We have a host to add to ret
             ret[name] = {}
             for obj in db[name].find().sort('_id', -1).limit(frame):
