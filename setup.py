@@ -15,9 +15,6 @@ setup(name='butter',
                 'butter',
                 'butter.kvm',
                 'butter.kvmd',
-                'butter.statd',
-                'butter.statd.data',
-                'butter.statd.alert',
                 ],
       scripts=[
                'scripts/butter',
@@ -26,7 +23,6 @@ setup(name='butter',
                     [
                      'conf/kvm',
                      'conf/kvmd',
-                     'conf/statd',
                     ]),
                   ('/etc/rc.d',
                     [

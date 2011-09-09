@@ -1,6 +1,6 @@
 # Maintainer: Thomas S Hatch <thatch45@gmail.com>
 
-pkgname=butter-local
+pkgname=butter
 pkgver=$(date +%Y%m%d)
 pkgrel=1
 pkgdesc="The complex operation manager above salt"
@@ -8,8 +8,8 @@ arch=(any)
 url="https://github.com/thatch45/butter"
 license=("APACHE")
 depends=('python2'
-         'salt-local')
-backup=('etc/butter/kvm' 'etc/butter/kvmd' 'etc/butter/statd')
+         'salt')
+backup=('etc/butter/kvm' 'etc/butter/kvmd')
 makedepends=()
 optdepends=()
 options=()

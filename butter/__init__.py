@@ -5,13 +5,11 @@ import butter.log
 
 import butter.kvm
 import butter.kvmd
-import butter.statd
 import sys
 
 _SUBSYSTEMS = {
                 'kvm':   butter.kvm.KVM,
                 'kvmd':  butter.kvmd.KVMD,
-                'statd': butter.statd.StatD,
              }
 
 def usage(stream):
