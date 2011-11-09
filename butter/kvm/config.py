@@ -9,15 +9,6 @@ Load up the configuration for butter
 import os
 import yaml
 
-def prepend_root_dir(opts, path_options):
-    '''
-    Prepends the options that represent filesystem paths with value of the
-    'root_dir' option.
-    '''
-    for path_option in path_options:
-        opts[path_option] = os.path.normpath(
-                os.sep.join([opts['root_dir'], opts[path_option]]))
-
 def config(path='/etc/butter/kvm'):
     '''
     Load up the configuration for butter kvm
@@ -26,11 +17,6 @@ def config(path='/etc/butter/kvm'):
             'instances': '/srv/vm/instances',
             'local_path': '/mnt/local/vm',
             'salt_pki': '/etc/salt/pki',
-            # Log options
-            'root_dir': '/',
-            'log_file' : '/var/log/butter/kvm',
-            'log_level' : 'warning',
-            'log_granular_levels': {},
             # Global vm generation options
             'storage_type': 'local', # Can be 'local', 'shared', 'choose'
             'distro': 'arch', # The default distribution to use
@@ -48,8 +34,5 @@ def config(path='/etc/butter/kvm'):
             opts.update(yaml.load(open(path, 'r')))
         except:
             pass
-
-    # Prepend root_dir to other paths
-    prepend_root_dir(opts, ['log_file'])
 
     return opts

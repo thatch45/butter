@@ -179,6 +179,43 @@ class Overlay(object):
         
         return True
 
+    def gen_salt(self):
+        '''
+        Generate the salt minion keys and place them in the overlay and accept
+        them in Salt
+        '''
+        sdir = os.path.join(self.over, 'etc/salt/pki')
+        if not os.path.exists(sdir):
+            os.makedirs(sdir)
+        if os.path.exists(os.path.join(sdir, 'minion.pub')):
+            return True
+        cmd = 'salt-key --gen-keys minion --gen-keys-dir {0} --keysize 2048'.format(sdir)
+        pub = os.path.join(sdir, 'minion.pub')
+        subprocess.call(cmd, shell=True)
+        tgt = os.path.join('/etc/salt/pki/minions', '{0}'.format(self.opts['fqdn']))
+        shutil.copy(pub, tgt)
+        return True
+
+    def set_hostname(self):
+        '''
+        Sets the hostname in the vm image
+        '''
+        netdir = os.path.join(self.over, 'etc/network.d')
+        if not os.path.exists(netdir):
+            os.makedirs(netdir)
+        fn_ = os.path.join(netdir, 'vm_service')
+        if os.path.exists(fn_):
+            return True
+        lines = [
+                "CONNECTION='ethernet'\n",
+                "DESCRIPTION='Te Virtual machine interface'\n",
+                "INTERFACE='service'\n",
+                "IP='dhcp'\n",
+                "HOSTNAME='{0}'\n".format(self.opts['fqdn'])
+                ]
+        open(fn_, 'w+').writelines(lines)
+        return True
+
     def setup_overlay(self):
         '''
         Run the sequence that sets up the overlay
@@ -195,6 +232,8 @@ class Overlay(object):
             self.set_env()
         if self.opts['udev']:
             self.gen_udev()
+        self.set_hostname()
+        self.gen_salt()
 
     def purge_overlay(self):
         '''

@@ -3,9 +3,9 @@ Initialize interactions with the butter kvm subsytem
 '''
 # Import Python libs
 import optparse
-import os
-import subprocess
 import sys
+import subprocess
+import os
 import time
 
 # Import third party libs
@@ -14,11 +14,8 @@ import yaml
 # Import butter libs
 import butter.kvm.config
 import butter.kvm.create
-import butter.kvm.migrate
 import butter.kvm.overlay
-import butter.log
-
-log = butter.log.getLogger(__name__)
+import butter.kvm.migrate
 
 def domain():
     '''
@@ -28,18 +25,6 @@ def domain():
     return subprocess.Popen('dnsdomainname',
             shell=True,
             stdout=subprocess.PIPE).communicate()[0].strip()
-
-def verify_env(dirs):
-    '''
-    Verify that the named directories are in place and that the environment
-    can shake the salt
-    '''
-    for dir_ in dirs:
-        if not os.path.isdir(dir_):
-            try:
-                os.makedirs(dir_)
-            except OSError, e:
-                print 'Failed to create directory path "%s" - %s' % (dir_, e)
 
 class KVM(object):
     '''
@@ -51,15 +36,11 @@ class KVM(object):
         '''
         self.opts = self.__parse()
 
-        for name, level in self.opts['log_granular_levels'].iteritems():
-            butter.log.set_logger_level(name, level)
-
     def __parse(self):
         '''
         Parse the butter command line options
         '''
-        prog = " ".join([os.path.basename(sys.argv[0]), sys.argv[1]])
-        parser = optparse.OptionParser(prog=prog)
+        parser = optparse.OptionParser()
 
         parser.add_option('-C',
                 '--create',
@@ -183,20 +164,9 @@ class KVM(object):
                 help='Pass in an alternative path for the butter kvm'\
                     + ' configuration file; default: /etc/butter/kvm')
 
-        parser.add_option('-l',
-                '--log-level',
-                dest='log_level',
-                default='warning',
-                choices=butter.log.LOG_LEVELS.keys(),
-                help='Console log level. One of %s. For the logfile settings '
-                     'see the config file. Default: \'%%default\'.' %
-                     ', '.join([repr(l) for l in butter.log.LOG_LEVELS.keys()]))
-
         options, args = parser.parse_args()
 
         cli = {}
-
-        butter.log.setup_console_logger(options.log_level)
 
         cli['create'] = options.create
         cli['destroy'] = options.destroy
@@ -283,9 +253,6 @@ class KVM(object):
         '''
         Execute the logic required to act on the passed state data
         '''
-        verify_env([os.path.dirname(self.opts['log_file'])])
-        butter.log.setup_logfile_logger(self.opts['log_file'], self.opts['log_level'])
-
         # Each sequence should be a function in the class so that the
         # capabilities can be manipulated in a more api centric way
         if self.opts['create']:
@@ -308,3 +275,63 @@ class KVM(object):
             self.create_obj().destroy()
             time.sleep(2)
             self.create_obj().create()
+
+class KVMD(object):
+    '''
+    The butter kvm subsystem daemon
+    '''
+    def __init__(self):
+        self.cli = self.__parse_cli()
+        self.opts = self.__parse(self.cli['config'])
+
+    def __parse_cli(self):
+        '''
+        Parse the command line options passed to the butter kvm daemon
+        '''
+        parser = optparse.OptionParser()
+        parser.add_option('-f',
+                '--foreground',
+                default=False,
+                action='store_true',
+                dest='foreground',
+                help='Run the butter kvm daemon in the foreground')
+
+        parser.add_option('-c',
+                '--config',
+                default='/etc/butter/kvm.conf',
+                dest='config',
+                help='Pass in an alternative configuration file')
+
+        options, args = parser.parse_args()
+
+        return {'foreground': options.foreground,
+                'config': options.config}
+
+    def __parse(self, conf):
+        '''
+        Parse the butter kvm deamon configuration file
+        '''
+        opts = {}
+
+        opts['images'] = '/srv/vm/images'
+        opts['pool_size'] = '5'
+        opts['keep_old'] = '2'
+        opts['interval'] = '5'
+        opts['image_source'] = ''
+        opts['distros'] = 'arch'
+        opts['format'] = 'raw'
+
+        if os.path.isfile(conf):
+            opts.update(yaml.load(open(self.cli['config'], 'r')))
+
+        return opts
+
+    def daemon(self):
+        '''
+        Starts the buter kvm  daemon
+        '''
+        kvmd = butter.kvm.daemon.Daemon(self.opts)
+        if not self.cli['foreground']:
+            butter.utils.daemonize()
+        kvmd.watch_pool()
+
