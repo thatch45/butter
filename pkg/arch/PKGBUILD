@@ -1,22 +1,40 @@
 # Maintainer: Thomas S Hatch <thatch45@gmail.com>
 
-pkgname=butter
-pkgver=0.1.0
+pkgname=@PACKAGE@
+pkgver=@VERSION@
 pkgrel=1
 pkgdesc="The complex operation manager above salt"
 arch=(any)
 url="https://github.com/thatch45/butter"
 license=("APACHE")
-depends=('python2'
-         'salt')
-backup=('etc/butter/kvm' 'etc/butter/kvmd')
+depends=('python2' 'salt')
+backup=('etc/butter/kvm' 'etc/butter/kvmd' 'etc/butter/virtd')
 makedepends=()
 optdepends=()
 options=()
-source=("$pkgname-$pkgver.tar.gz")
+source=(@SOURCE@)
+md5sums=(@MD5@)
+is_git_build='@GIT_BUILD@'
 
-package() {
-  cd $srcdir/$pkgname-$pkgver
+if [ "$is_git_build" = "yes" ]
+then
+    _gitroot="git://github.com/thatch45/butter.git"
+    _gitname="butter"
+else
+    pkgrel=@RELEASE@
+fi
 
-  python2 setup.py install --root=$pkgdir/ --optimize=1
+build()
+{
+    if [ "$is_git_build" = "yes" ]
+    then
+        cd "$srcdir"
+        git clone "git://github.com/thatch45/butter.git" "$pkgname-$pkgver"
+    fi
+}
+
+package()
+{
+    cd "$srcdir/$pkgname-$pkgver"
+    python2 setup.py install --root="$pkgdir/" --optimize=1
 }

@@ -3,18 +3,20 @@
 The setup script for butter
 '''
 
+from butter.version import PACKAGE, VERSION, URL
 from distutils.core import setup
 
-setup(name='butter',
-      version='0.4.0',
+setup(name=PACKAGE,
+      version=VERSION,
       description='High level execution manager',
       author='Thomas S Hatch',
       author_email='thatch45@gmail.com',
-      url='https://github.com/thatch45/butter',
+      url=URL,
       packages=[
                 'butter',
                 'butter.kvm',
                 'butter.kvmd',
+                'butter.virtd',
                 ],
       scripts=[
                'scripts/butter',
@@ -23,6 +25,7 @@ setup(name='butter',
                     [
                      'conf/kvm',
                      'conf/kvmd',
+                     'conf/virtd',
                     ]),
                   ('/etc/rc.d',
                     [

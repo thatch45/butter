@@ -1,0 +1,3 @@
+include [A-Z]*
+recursive-include * *
+global-exclude *.py[co] *.swp .git*
