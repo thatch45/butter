@@ -1,22 +1,23 @@
 '''
 Initialize command line stacks and direct them into the correct subsystem
 '''
-import butter.log
-
 import butter.kvm
 import butter.kvmd
+import butter.log
+import butter.virtd
 import sys
 
 _SUBSYSTEMS = {
                 'kvm':   butter.kvm.KVM,
                 'kvmd':  butter.kvmd.KVMD,
+                'virtd': butter.virtd.main,
              }
 
-def usage(stream):
+def _usage(argv):
     '''
     Display the usage message.
     '''
-    print >> stream, '''
+    print >> sys.stderr, '''
 Welcome to the butter toolkit.  Butter is the objective execution and
 management layer built on top of the Salt communication framework.
 
@@ -26,20 +27,29 @@ For example:
 
 The available subsystems are: {}
 '''.format(", ".join(sorted(_SUBSYSTEMS)))
+    return 0
+
+def _bad_subsystem(argv):
+    '''
+    Display an error message.
+    '''
+    print >> sys.stderr, '''error: invalid subsystem '{}'
+use one of the following: {}'''.format(argv[1],
+                                       ", ".join(sorted(_SUBSYSTEMS)))
+    return 1
 
 def run():
     '''
     Execute the the butter command.
     '''
     if len(sys.argv) == 1:
-        usage(sys.stdout)
-        sys.exit(0)
-
-    cls = _SUBSYSTEMS.get(sys.argv[1])
-    if cls is None:
-        print >> sys.stderr, '''invalid subsystem '{}'
-use one of the following: {}'''.format(sys.argv[1],
-                                       ", ".join(sorted(_SUBSYSTEMS)))
-        sys.exit(1)
+        handler = _usage
+    else:
+        handler = _SUBSYSTEMS.get(sys.argv[1], _bad_subsystem)
     butter.log.init()
-    cls().run()
+    if hasattr(handler, 'run'):
+        handler().run()
+        rc = 0
+    else:
+        rc = handler(sys.argv)
+    sys.exit(rc)
