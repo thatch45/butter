@@ -5,13 +5,15 @@
 
 #####         Logging settings       #####
 ##########################################
+
 # The location of the master log file
-#log_file: /var/log/butter/kvmd
+#log_file: /var/log/butter/virtd
+
 # The level of messages to send to the log file.
 # One of 'info', 'quiet', 'critical', 'error', 'debug', 'warning'.
 # Default: 'warning'
 #log_level: warning
-#
+
 # Logger levels can be used to tweak specific loggers logging levels.
 # Imagine you want to have the butter library at the 'warning' level,
 # but you still wish to have 'butter.modules' at the 'debug' level:
@@ -19,14 +21,21 @@
 #     'butter': 'warning',
 #     'butter.modules': 'debug'
 #   }
-#
 #log_granular_levels: {}
 
-# Configuration for the kvm daemon
-#images: /srv/vm/images
-#pool_size: 5
-#keep_old: 2
-#interval: 5
-#image_source:
-#distros: [arch]
-#format: raw
+#####         virtd settings         #####
+##########################################
+
+image_source: http://192.168.42.150/archlinux/varch
+
+image_dest: /srv/vm/images
+
+image_pattern: archdev_(?P<version>)-\d+.(?P<format>raw|qcow|qcom2|vmdk|vdi)(\.gz)?
+
+digest_pattern: archdev_(?P<version>)-\d+.(?P<digest>sha(\d+)|md5)sum
+
+sync_interval:
+    days: 1
+
+keep_for:
+    days: 1
