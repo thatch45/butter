@@ -208,8 +208,9 @@ class Overlay(object):
             return True
         lines = [
                 "CONNECTION='ethernet'\n",
-                "DESCRIPTION='Te Virtual machine interface'\n",
+                "DESCRIPTION='The Virtual machine interface'\n",
                 "INTERFACE='service'\n",
+                "DHCP_OPTIONS='-D {fqdn}'\n".format(**self.opts),
                 "IP='dhcp'\n",
                 "HOSTNAME='{0}'\n".format(self.opts['fqdn'])
                 ]
