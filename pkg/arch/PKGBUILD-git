@@ -7,8 +7,7 @@ arch=('any')
 url="https://github.com/thatch45/butter"
 license=('APACHE')
 groups=()
-depends=('python2'
-         'salt-git')
+depends=('python2' 'salt-git' 'inetutils')
 makedepends=('git')
 provides=()
 backup=('etc/butter/kvm' 'etc/butter/kvmd')
