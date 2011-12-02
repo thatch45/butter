@@ -210,7 +210,7 @@ class Overlay(object):
                 "CONNECTION='ethernet'\n",
                 "DESCRIPTION='The Virtual machine interface'\n",
                 "INTERFACE='service'\n",
-                "DHCP_OPTIONS='-l {fqdn}'\n".format(**self.opts),
+                "DHCP_OPTIONS='-I {fqdn}'\n".format(**self.opts),
                 "IP='dhcp'\n",
                 "HOSTNAME='{0}'\n".format(self.opts['fqdn'])
                 ]
