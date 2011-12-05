@@ -247,12 +247,12 @@ class Overlay(object):
             conf = raw_input('Please enter yes or no [yes/No]: ')
             if not conf.strip() == 'yes':
                 return
-        if self.opts['dnsmasq']:
-            dhcp = os.path.join(self.opts['dnsmasq'],
-                self.opts['fqdn'] + '.conf')
-            if os.path.isfile(dhcp):
-                os.remove(dhcp)
-        if os.path.isdir(self.over):
-            shutil.rmtree(self.over)
+        #if self.opts['dnsmasq']:
+        #    dhcp = os.path.join(self.opts['dnsmasq'],
+        #        self.opts['fqdn'] + '.conf')
+        #    if os.path.isfile(dhcp):
+        #        os.remove(dhcp)
+        #if os.path.isdir(self.over):
+        #    shutil.rmtree(self.over)
         ca_cmd = 'puppetca --clean ' + self.opts['fqdn']
         subprocess.call(ca_cmd, shell=True)
