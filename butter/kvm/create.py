@@ -10,8 +10,9 @@ import butter.kvm.data
 import butter.utils
 import butter.kvm.overlay
 # Import python libs
-import shutil
 import os
+import shutil
+import socket
 import subprocess
 
 def find_image(pool, distro):
@@ -288,6 +289,24 @@ class Create(object):
             self.local.cmd(host, 'virt.purge', [self.opts['fqdn'], True])
         if os.path.isdir(self.instance):
             shutil.rmtree(self.instance)
+        try:
+            ipaddr = socket.gethostbyname(self.opts['fqdn'])
+            tmpfile = '/tmp/nsupdate.' + self.opts['fqdn']
+            try:
+                with open(tmpfile, 'w') as fp:
+                    print >> fp, 'update delete {0} IN A {1}'.format(
+                            self.opts['fqdn'], ipaddr )
+                    print >> fp, 'send'
+                cmd = [ 'nsupdate', '-k', '/etc/rndc.key', tmpfile ]
+                rc = subprocess.Popen( cmd ).wait()
+                if rc != 0:
+                    print 'failed to remove DNS entry for {0}/{1}'.format(
+                            self.opts['fqdn'], ipaddr)
+            finally:
+                os.remove(tmpfile)
+        except socket.error:
+            # Host is not in DNS
+            pass
 
     def find_host(self):
         '''
