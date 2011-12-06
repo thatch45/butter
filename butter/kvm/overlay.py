@@ -252,7 +252,7 @@ class Overlay(object):
         #        self.opts['fqdn'] + '.conf')
         #    if os.path.isfile(dhcp):
         #        os.remove(dhcp)
-        #if os.path.isdir(self.over):
-        #    shutil.rmtree(self.over)
-        ca_cmd = 'puppetca --clean ' + self.opts['fqdn']
-        subprocess.call(ca_cmd, shell=True)
+        if os.path.isdir(self.over):
+            shutil.rmtree(self.over)
+        #ca_cmd = 'puppetca --clean ' + self.opts['fqdn']
+        #subprocess.call(ca_cmd, shell=True)
