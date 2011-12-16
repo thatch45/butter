@@ -296,6 +296,7 @@ class Create(object):
                 with open(tmpfile, 'w') as fp:
                     print >> fp, 'update delete {0} IN A {1}'.format(
                             self.opts['fqdn'], ipaddr )
+                    print >> fp, 'update delete {}. TXT'.format(self.opts['fqdn'])
                     print >> fp, 'send'
                 cmd = [ 'nsupdate', '-k', '/etc/rndc.key', tmpfile ]
                 rc = subprocess.Popen( cmd ).wait()
