@@ -10,7 +10,7 @@ groups=()
 depends=('python2' 'salt-git' 'inetutils')
 makedepends=('git')
 provides=()
-backup=('etc/butter/kvm' 'etc/butter/kvmd')
+backup=('etc/butter/kvm' 'etc/butter/kvmd' 'etc/butter/vmcache.conf')
 
 _gitroot="git://github.com/thatch45/butter.git"
 _gitname="butter"

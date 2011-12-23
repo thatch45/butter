@@ -3,9 +3,10 @@ Initialize interactions with the butter kvm subsytem
 '''
 # Import Python libs
 import optparse
-import sys
-import subprocess
 import os
+import socket
+import subprocess
+import sys
 import time
 
 # Import third party libs
@@ -22,9 +23,7 @@ def domain():
     Return the domain name for this system
     '''
     # This is going to need to be more robust
-    return subprocess.Popen('dnsdomainname',
-            shell=True,
-            stdout=subprocess.PIPE).communicate()[0].strip()
+    return socket.getfqdn().split('.')[1:]
 
 class KVM(object):
     '''

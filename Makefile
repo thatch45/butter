@@ -2,13 +2,13 @@
 
 SHELL=/bin/sh
 NOW:=$(shell date +'%Y.%m.%d_%H:%M:%S')
-PYTHON:=$(shell type -p python || type -p python2)
+PYTHON:=$(shell type -p python2 || type -p python)
+NOSETESTS:=$(shell type -p nosetests2 || type -p nosetests)
 PACKAGE:=$(shell $(PYTHON) -c 'from butter.version import PACKAGE; print PACKAGE')
 VERSION:=$(shell $(PYTHON) -c 'from butter.version import VERSION; print VERSION')
 URL:=$(shell     $(PYTHON) -c 'from butter.version import URL; print URL')
 SRCURL:=$(shell  $(PYTHON) -c 'from butter.version import SRCURL; print SRCURL')
 TARBALL:=dist/$(PACKAGE)-$(VERSION).tar.gz
-PYTHON:=$(shell type -p python || type -p python2)
 
 .PHONY: arch clean clobber coverage default dist install lint test version
 
@@ -26,17 +26,17 @@ clobber: clean
 	-rm -rf dist
 
 #test:
-#	PYTHONPATH=$(PWD) nosetests -s
+#	PYTHONPATH=$(PWD) ${NOSETESTS} -s
 
 #coverage:
-#	PYTHONPATH=$(PWD) nosetests -s --with-coverage --cover-package=butter --cover-html
+#	PYTHONPATH=$(PWD) ${NOSETESTS} -s --with-coverage --cover-package=beyond --cover-html
 
 lint:
 	pylint --rcfile=pylint.cfg butter
 
 $(TARBALL): setup.py butter/*.py butter/*/*.py
 	-rm -rf dist build
-	PYTHONPATH=$(PWD) nosetests -s
+	PYTHONPATH=$(PWD) ${NOSETESTS} -s
 	$(PYTHON) setup.py sdist
 
 install:
@@ -48,6 +48,10 @@ version: arch-version
 # ------------------------------------------------------------------------
 # ArchLinux packaging
 # ------------------------------------------------------------------------
+archdev:
+	-pacman -R --noconfirm $(PACKAGE)
+	make clobber arch
+	pacman -U --noconfirm dist/*xz
 
 arch: $(TARBALL)
 	echo $(TARBALL)

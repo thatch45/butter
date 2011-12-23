@@ -4,13 +4,13 @@ Initialize command line stacks and direct them into the correct subsystem
 import butter.kvm
 import butter.kvmd
 import butter.log
-import butter.virtd
+import butter.vmcache
 import sys
 
 _SUBSYSTEMS = {
                 'kvm':   butter.kvm.KVM,
                 'kvmd':  butter.kvmd.KVMD,
-                'virtd': butter.virtd.main,
+                'vmcache': butter.vmcache.main.main,
              }
 
 def _usage(argv):
@@ -51,5 +51,5 @@ def run():
         handler().run()
         rc = 0
     else:
-        rc = handler(sys.argv)
+        rc = handler(sys.argv[1:])
     sys.exit(rc)

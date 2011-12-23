@@ -17,6 +17,7 @@ setup(name=PACKAGE,
                 'butter.kvm',
                 'butter.kvmd',
                 'butter.virtd',
+                'butter.vmcache',
                 ],
       scripts=[
                'scripts/butter',
@@ -25,11 +26,12 @@ setup(name=PACKAGE,
                     [
                      'conf/kvm',
                      'conf/kvmd',
-                     'conf/virtd',
+                     'conf/vmcache.conf',
                     ]),
                   ('/etc/rc.d',
                     [
                      'init/butter-kvmd',
+                     'init/butter-vmcache',
                     ]),
                  ],
 

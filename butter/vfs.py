@@ -17,12 +17,29 @@ rooted at the specified url or path.
 from HTMLParser import HTMLParser
 from contextlib import closing
 from urllib import unquote
-from urllib2 import urlopen
+from urllib2 import urlopen, HTTPError
 from urlparse import urlsplit, urlunsplit
+import errno
 import logging
 import os
 
-log = logging.getLogger(__name__)
+_log = logging.getLogger(__name__)
+
+class NoSuchFileError(RuntimeError):
+    '''
+    '''
+    def __init__(self, *args, **kwargs):
+        '''
+        '''
+        RuntimeError.__init__(self, *args, **kwargs)
+
+class ReadOnlyError(RuntimeError):
+    '''
+    '''
+    def __init__(self, *args, **kwargs):
+        '''
+        '''
+        RuntimeError.__init__(self, *args, **kwargs)
 
 class LocalFilesystem(object):
     '''
@@ -84,8 +101,11 @@ class LocalFilesystem(object):
         >>> 'passwd' in fs.list('/etc')
         True
         '''
+        path = self.abspath(path)
+        if not os.path.isdir(path):
+            raise NoSuchFileError(path)
         result = []
-        for filename in os.listdir(self.abspath(path)):
+        for filename in os.listdir(path):
             if os.path.isdir(self.abspath(filename)):
                 filename += os.sep
             result.append(filename)
@@ -103,7 +123,11 @@ class LocalFilesystem(object):
         0
         '''
         path = self.abspath(path)
-        log.debug('open %s mode=%s', path, mode)
+        _log.debug('open %s mode=%s', path, mode)
+        if 'w' in mode or 'a' in mode:
+            parent = os.path.dirname(path)
+            if not os.path.isdir(parent):
+                os.makedirs(parent)
         return open(path, mode)
 
     def walk(self, path, topdown=True):
@@ -124,6 +148,22 @@ class LocalFilesystem(object):
             if len(root) == 0:
                 root = '/'
             yield root, dirs, files
+
+    def rename(self, src, dest):
+        '''
+        Rename a file.
+        '''
+        os.rename(self.abspath(src), self.abspath(dest))
+
+    def remove(self, path):
+        '''
+        Remove a file.
+        '''
+        try:
+            os.remove(self.abspath(path))
+        except (OSError, IOError), ex:
+            if ex.errno != errno.ENOENT:
+                raise
 
 class HttpFilesystem(object):
     '''
@@ -181,9 +221,13 @@ class HttpFilesystem(object):
         List files in the specified directory.
         Directory files will be suffixed with '/'.
         '''
-        with closing(urlopen(self.abspath(path))) as fp:
-            html = fp.read()
-        return HttpFilesystem.html_to_filenames(html)
+        path = self.abspath(path)
+        try:
+            with closing(urlopen(path)) as fp:
+                html = fp.read()
+            return HttpFilesystem.html_to_filenames(html)
+        except HTTPError:
+            raise NoSuchFileError(path)
 
     def open(self, path, mode='r'):
         '''
@@ -191,8 +235,8 @@ class HttpFilesystem(object):
         '''
         path = self.abspath(path)
         if 'w' in mode or 'a' in mode or '+' in mode:
-            raise ValueError('read-only filesystem: ' + path)
-        log.debug('open %s mode=%s', path, mode)
+            raise ReadOnlyError('read-only filesystem: ' + path)
+        _log.debug('open %s mode=%s', path, mode)
         return closing(urlopen(path))
 
     def walk(self, path, topdown=True):
@@ -216,6 +260,18 @@ class HttpFilesystem(object):
         if not topdown:
             yield path, dirs, files
 
+    def rename(self, src, unused_dest):
+        '''
+        Rename a file.
+        '''
+        raise ReadOnlyError('read-only filesystem: ' + self.abspath(src))
+
+    def remove(self, path):
+        '''
+        Remove a file.
+        '''
+        raise ReadOnlyError('read-only filesystem: ' + self.abspath(path))
+
     @staticmethod
     def html_to_filenames(html):
         '''
@@ -227,7 +283,7 @@ class HttpFilesystem(object):
                 self.hrefs = []
             def handle_starttag(self, tag, attrs):
                 if tag == 'a':
-                    for name, value in attrs:
+                    for unused_name, value in attrs:
                         parts = urlsplit(value)
                         # only consider things that look like files
                         # or directories directly beneath the current dir
@@ -275,7 +331,7 @@ def open(url, mode='r'):
     parts = urlsplit(url)
     if parts.scheme in ['', 'file']:
         # An optimization to access local files.
-        log.debug('open %s mode=%s', parts.path, mode)
+        _log.debug('open %s mode=%s', parts.path, mode)
         return file(parts.path, mode)
     else:
         # Split the URL into a basedir and a filename, use the basedir
