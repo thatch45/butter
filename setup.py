@@ -16,7 +16,6 @@ setup(name=PACKAGE,
                 'butter',
                 'butter.kvm',
                 'butter.kvmd',
-                'butter.virtd',
                 'butter.vmcache',
                 ],
       scripts=[
