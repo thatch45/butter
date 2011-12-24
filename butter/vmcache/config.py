@@ -28,7 +28,7 @@ class Config(dict):
         self.remote_fs = None
         self.interval_secs = None
         self.regex = None
-        self.post_cmd = None
+        self.after_download_commands = None
         self.keep = 1
 
     def load(self):
@@ -112,6 +112,13 @@ class Config(dict):
         if newcfg['keep'] < 1:
             newcfg['keep'] = 1
 
+        after_cmds = newcfg.get('after_download')
+        if after_cmds is None:
+            after_cmds = []
+        elif isinstance(after_cmds, basestring):
+            after_cmds = [after_cmds]
+        newcfg['after_download'] = after_cmds
+
         # Commit the changes
         self.clear()
         self.update(newcfg)
@@ -120,5 +127,5 @@ class Config(dict):
         self.interval_secs = new_interval_secs
         self.regex = new_regex
         self.keep = newcfg['keep']
-        self.post_cmd = newcfg.get('post_download_cmd')
+        self.after_download_commands = newcfg.get('after_download')
         return True

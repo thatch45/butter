@@ -66,12 +66,23 @@ class VmCacheDaemon(Daemon):
                     img = latest_remote.download(self.config.local_fs)
                     if img:
                         local[img.img_id] = img
-                        if self.config.post_cmd:
+                        if self.config.after_download_commands:
                             imgpath = img.fs.abspath(img.image_path)
-                            cmd = self.config.post_cmd.format(image_path=imgpath)
-                            _log.info('run: {}'.format(cmd))
-                            rc = os.system(cmd)
-                            _log.info('exit={}'.format(rc))
+                            digestpath = img.fs.abspath(img.digest_path)
+                            attrs = {
+                                'image_path':      imgpath,
+                                'image_filename':  os.path.basename(imgpath),
+                                'digest_path':     digestpath,
+                                'digest_filename': os.path.basename(digestpath)
+                                }
+                            for cmd in self.config.after_download_commands:
+                                cmd = cmd.format(**attrs)
+                                _log.info('run: {}'.format(cmd))
+                                rc = os.system(cmd)
+                                _log.info('exit={}'.format(rc))
+                                if rc != 0:
+                                    _log.error('abort after_download processing')
+                                    break
                 else:
                     _log.debug('local {} image is up-to-date: {}'
                                 .format(latest_local.name, latest_local))
